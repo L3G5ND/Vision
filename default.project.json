@@ -1,0 +1,22 @@
+{
+  "name": "UI Library",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "UILibrary": {
+        "$path": "src/UILibrary"
+      }
+    },
+
+    "ServerScriptService": {
+
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        
+      }
+    }
+  }
+}
