@@ -6,19 +6,19 @@ Type.GetType = function(content)
     end
     local mt = getmetatable(content)
     if mt then
-        if mt.type then
-            return mt.type
+        if mt._type then
+            return mt._type
         end
     end
     return 'table'
 end
 
 Type.SetType = function(tbl, type)
-    assert(typeof(tbl) == 'table', string.format('Type table expected, got %s', typeof(tbl)))
+    assert(typeof(tbl) == 'table', string.format('Table expected, got %s', typeof(tbl)))
     if not getmetatable(tbl) then
         setmetatable(tbl, {})
     end
-    getmetatable(tbl).type = type
+    getmetatable(tbl)._type = type
 end
 
 return Type

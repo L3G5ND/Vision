@@ -1,24 +1,31 @@
 local StrictTable = require(script.Util.StrictTable)
 
-local CreateElement = require(script.CreateElement)
-local CreateElementGroup = require(script.CreateElementGroup)
+local Element = require(script.Element)
 local Component = require(script.Component)
-local Renderer = require(script.Renderer)
 local Types = require(script.Types)
+
+local NodeTree = require(script.NodeTree)
+local UIRenderer = require(script.UIRenderer)
+
+local Renderer = NodeTree.createRenderer(UIRenderer)
 
 local UILibrary = {
 
-    CreateElement = CreateElement,
-    createElement = CreateElement,
+    CreateElement = Element.createElement,
+    createElement = Element.createElement,
 
-    CreateElementGroup = CreateElementGroup,
-    createElementGroup = CreateElementGroup,
+    CreateElementGroup = Element.createElementGroup,
+    createElementGroup = Element.createElementGroup,
 
     Component = Component,
     component = Component,
 
-    Mount = Renderer.Mount,
-    mount = Renderer.Mount,
+    Mount = function(element, parent)
+        return Renderer:mountNodeTree(element, parent)
+    end,
+    mount = function(element, parent)
+        return Renderer:mountNodeTree(element, parent)
+    end,
 
     Types = Types,
     types = Types,
@@ -27,7 +34,7 @@ local UILibrary = {
 
 setmetatable(UILibrary, {
     __call = function(tbl, ...)
-        CreateElement(...)
+        Element.createElement(...)
     end,
 })
 

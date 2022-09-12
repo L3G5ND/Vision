@@ -2,9 +2,15 @@ local RS = game:GetService('ReplicatedStorage')
 
 local UILibrary = require(RS.UILibrary)
 
-local function createListItem(props)
+local ListItem = UILibrary.Component.new()
+
+function ListItem:init()
+    
+end
+
+function ListItem:render()
     return UILibrary.createElement('Frame', {
-        Size = UDim2.new(1, 0, 0, 50),
+        Size = self.props.Size,
         BackgroundTransparency = 1,
     }, {
         UILibrary.createElement('UIPadding', {
@@ -16,7 +22,29 @@ local function createListItem(props)
         UILibrary.createElement('TextLabel', {
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundColor3 = Color3.fromRGB(104, 104, 104),
-            Text = props.Text
+            Text = self.props.Text
+        }),
+    })
+end
+
+local function createListItem(props)
+    return UILibrary.createElement('Frame', {
+        Size = UDim2.new(1, 0, 0, 50),
+        BackgroundTransparency = 1,
+    }, {
+        UILibrary.createElement('UIPadding', {
+            PaddingTop = UDim.new(0, 2),
+            PaddingBottom = UDim.new(0, 2),
+            PaddingLeft = UDim.new(0, 4),
+            PaddingRight = UDim.new(0, 4),
+        }),
+        UILibrary.createElement('TextButton', {
+            Size = UDim2.new(1, 0, 1, 0),
+            BackgroundColor3 = Color3.fromRGB(104, 104, 104),
+            Text = props.Text,
+           -- [UILibrary.Event.MouseButton1Click] = function()
+          --      props(props.Text)
+          --  end
         }),
     })
 end
@@ -24,9 +52,7 @@ end
 local function createListItems(n)
     local items = {}
     for i = 1, n do
-        items[i] = createListItem({
-            Text = i
-        })
+        items[i] = UILibrary.createElement(createListItem, {Text = i})
     end
     return UILibrary.createElementGroup(items)
 end

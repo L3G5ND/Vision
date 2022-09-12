@@ -1,10 +1,12 @@
-local Package = script.Parent
+local Package = script.Parent.Parent
+local Element = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
 
 local Types = require(Package.Types)
-local ElementKind = require(Package.ElementKind)
+
+local ElementKind = require(Element.ElementKind)
 
 local BlacklistedProperties = {
     Parent = true,
@@ -25,13 +27,13 @@ return function (content, props, children)
     local kind = ElementKind.Normal
     if Type.GetType(content) == 'function' then
         kind = ElementKind.Function
-    elseif Type.GetType(content) == ElementKind.ElementComponent then
+    elseif Type.GetType(content) == ElementKind.Component then
         kind = ElementKind.Component
     end
 
     local element = setmetatable({
 
-        content = content,
+        type = content,
         kind = kind,
 
         props = props, 

@@ -1,0 +1,20 @@
+local Package = script.Parent.Parent
+
+local Util = Package.Util
+local Type = require(Util.Type)
+
+local Types = require(Package.Types)
+
+return function(element)
+    if Type.GetType(element) == Types.ElementCreator then
+        local called = false
+        return function()
+            if not called then
+                called = true
+                return 1, element
+            end
+        end
+    end
+    
+    return pairs(element)
+end

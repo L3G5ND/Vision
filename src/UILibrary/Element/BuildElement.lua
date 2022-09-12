@@ -1,4 +1,4 @@
-local Package = script.Parent
+local Package = script.Parent.Parent
 
 local ElementContainer = Package.ElementContainer
 
@@ -25,6 +25,6 @@ setmetatable(BuildFunctions, {
     end
 })
 
-return function(element)
-    return BuildFunctions[element.content]()
+return function(type)
+    return BuildFunctions[type]()
 end
