@@ -2,6 +2,7 @@ local Package = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
+local DeepEqual = require(Util.DeepEqual)
 
 local Element = require(Package.Element)
 local Types = require(Package.Types)
@@ -20,71 +21,165 @@ function NodeTree:updateChildren(data)
     local newChildren = data.children
     local parent = data.parent
 
-    for i, child in Element.iterator(newChildren) do
-        if child ~= node.children[i] then
-            print('added child node', i)
+    local updateNodes = {}
+
+    for key, child in pairs(node.children) do
+        local newElement = newChildren[key]
+
+        if not newElement then
+            self:unmountNode({
+                node = child
+            })
+            node.children[key] = nil
+            continue
+        end
+
+        if not self:isSame({
+            node = node, 
+            element = newElement
+        }) then
+            child = self:updateNode({
+                node = child, 
+                newElement = newElement
+            })
+            updateNodes[key] = true
+            node.children[key] = child
+        end
+
+    end
+
+    for key, child in Element.iterator(newChildren) do
+        if not updateNodes[key] then
+            local _key = key
+            if key == Types.ParentKey then
+                _key = node.key
+            end
             local childNode = self:mountNode({
                 element = child,
-                parent = parent
+                parent = parent,
+                key = _key,
             })
             childNode.parent = node
-            node.children[#node.children+1] = childNode
-        else
-            print('removed child node', i)
-            self:unmountNode(child)
+            node.children[key] = childNode
         end
     end
 end
 
 function NodeTree:_createNode(data)
-
     local element = data.element
     local parent = data.parent
+    local key = data.key
 
     local node = {
         parent = Types.None,
         children = {},
+        key = key,
         data = {
             parent = parent,
             element = element,
-            object = Types.None
-        }    
+            object = Types.None,
+        },
     }
     Type.SetType(node, Types.Node)
+
     return node
+end
+
+function NodeTree:isSame(data)
+    local node = data.node
+    local element = data.element
+
+    return DeepEqual(node.data.element, element) 
 end
 
 function NodeTree:updateNode(data)
     
     local node = data.node
+    local element = node.data.element
     local newElement = data.newElement
 
-    if node.data.element == newElement then
-        return node.data.element
-    end
+    local parent = node.data.parent
+    local key = node.key
 
+    local typeIsSame = DeepEqual(node.data.element.type, newElement.type)
+
+    if not typeIsSame then
+        self:unmountNode({
+            node = node
+        })
+        return self:mountNode({
+            element = newElement, 
+            parent = parent,
+            key = key
+        })
+
+    else
+        local kind = newElement.kind
+
+        if kind == Element.kind.Normal then
+            node = self.renderer.Update(self, node, newElement)
+
+        elseif kind == Element.kind.Group then
+            self:updateChildren({
+                node = node,
+                children = newElement.elements,
+                parent = parent
+            })
+        elseif kind == Element.kind.Function then
+            local newElement = newElement.type(newElement.props)
+            assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
+            self:updateChildren({
+                node = node,
+                children = newElement,
+                parent = node.data.parent
+            })
+            
+        elseif kind == Element.kind.Component then
+            
+        end
+
+        node.data.element = newElement
+
+        return node
+    end
 end
 
 function NodeTree:mountNode(data)
 
     local element = data.element
     local parent = data.parent
+    local key = data.key
 
     local node = self:_createNode({
-        element = element, 
-        parent = parent
+        element = element,
+        parent = parent,
+        key = key
     })
 
     local kind = element.kind
     
     if kind == Element.kind.Normal then
-        self.renderer.RenderNormal(self, node)
+        self.renderer.Render(self, node)
+
     elseif kind == Element.kind.Group then
-        self.renderer.RenderGroup(self, node)
+        self:updateChildren({
+            node = node,
+            children = element.elements,
+            parent = parent
+        })
+
     elseif kind == Element.kind.Function then
-        self.renderer.RenderFunction(self, node)
+        local newElement = element.type(element.props)
+        assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
+        self:updateChildren({
+            node = node,
+            children = newElement,
+            parent = node.data.parent
+        })
+
     elseif kind == Element.kind.Component then
         self.renderer.RenderComponent(self, node)
+
     end
 
     return node
@@ -99,12 +194,14 @@ function NodeTree:unmountNode(data)
 
     if kind ~= Element.kind.Component then
         for _, node in pairs(node.children) do
-            self:unmountNode(node)
+            self:unmountNode({node = node})
+        end
+        if node.data.object == Types.None then
+            return
         end
         node.data.object:Destroy()
-        node = nil
     else
-
+        --component
     end
 
 end
@@ -122,32 +219,19 @@ function NodeTree:mountNodeTree(element, parent)
 
     tree.root = self:mountNode({
         element = element, 
-        parent = parent
+        parent = parent,
+        key = 'root'
     })
     tree.mounted = true
 
-    wait(7)
-    self:updateChildren({
-        node = tree.root,
-        children = Element.createElement('ScreenGui', {}, {
-            Element.createElement('Frame', {
-                Size = UDim2.new(0, 400, 0, 400),
-                Position = UDim2.new(.5, 0, .5, 0),
-                AnchorPoint = Vector2.new(.5, .5),
-                BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-            }, {
-                Element.createElement('UIListLayout', {
-                    Padding = UDim.new(0, 1.5),
-                }),
-                Element.createElement('UIPadding', {
-                    PaddingTop = UDim.new(0, 2),
-                }),
-            })
-        }),
-        parent = parent
-    })
-
     return tree
+end
+
+function NodeTree:updateNodeTree(tree, newElement)
+    tree.root = self:updateNode({
+        node = tree.root,
+        newElement = newElement
+    })
 end
 
 return NodeTree

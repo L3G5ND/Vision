@@ -9,4 +9,5 @@ return {
     ElementCreator = TypeMarker.Mark('ElementCreator'),
     NodeTree = TypeMarker.Mark('NodeTree'),
     Node = TypeMarker.Mark('Node'),
+    ParentKey = TypeMarker.Mark('ParentKey')
 }

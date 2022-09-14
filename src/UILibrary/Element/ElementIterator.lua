@@ -1,4 +1,7 @@
 local Package = script.Parent.Parent
+local Element = script.Parent
+
+local ElementKind = require(Element.ElementKind)
 
 local Util = Package.Util
 local Type = require(Util.Type)
@@ -11,7 +14,7 @@ return function(element)
         return function()
             if not called then
                 called = true
-                return 1, element
+                return Types.ParentKey, element
             end
         end
     end

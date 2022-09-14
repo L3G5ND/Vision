@@ -27,6 +27,13 @@ local UILibrary = {
         return Renderer:mountNodeTree(element, parent)
     end,
 
+    Update = function(tree, newElement)
+        return Renderer:updateNodeTree(tree, newElement)
+    end,
+    update = function(tree, newElement)
+        return Renderer:updateNodeTree(tree, newElement)
+    end,
+
     Types = Types,
     types = Types,
     
