@@ -196,6 +196,9 @@ function NodeTree:unmountNode(data)
         for _, node in pairs(node.children) do
             self:unmountNode({node = node})
         end
+        if node.data.eventManager then
+            node.data.eventManager:Destroy()
+        end
         if node.data.object == Types.None then
             return
         end
@@ -213,7 +216,6 @@ function NodeTree:mountNodeTree(element, parent)
 
     local tree = {
         root = nil,
-        mounted = false,
     }
     Type.SetType(tree, Types.NodeTree)
 
@@ -222,9 +224,14 @@ function NodeTree:mountNodeTree(element, parent)
         parent = parent,
         key = 'root'
     })
-    tree.mounted = true
 
     return tree
+end
+
+function NodeTree:unmountNodeTree(tree)
+    self:unmountNode({
+        node = tree.root
+    })
 end
 
 function NodeTree:updateNodeTree(tree, newElement)

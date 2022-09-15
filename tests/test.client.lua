@@ -2,6 +2,7 @@ local RS = game:GetService('ReplicatedStorage')
 
 local UILibrary = require(RS.UILibrary)
 
+--[[
 local ListItem = UILibrary.Component.new()
 
 function ListItem:init()
@@ -25,7 +26,7 @@ function ListItem:render()
             Text = self.props.Text
         }),
     })
-end
+end]]
 
 local function createListItem(props)
     return UILibrary.createElement('Frame', {
@@ -42,13 +43,17 @@ local function createListItem(props)
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundColor3 = Color3.fromRGB(104, 104, 104),
             Text = props.Text,
-           -- [UILibrary.Event.MouseButton1Click] = function()
-          --      props(props.Text)
-          --  end
+            [UILibrary.Event.MouseButton1Down] = function(object, a)
+                print('Down')
+            end,
+            [UILibrary.Event.MouseButton1Up] = function(object, a)
+                print('Up')
+            end
         }),
     })
 end
 
+--[[
 local function createListItems(n)
     local items = {}
     for i = 1, n do
@@ -76,6 +81,7 @@ local function createList(props)
     })
 end
 
+--[[
 local maxNum = 7
 local times = 10
 
@@ -99,4 +105,34 @@ for i = 1, maxNum*times-1 do
     wait(.1)
 end
 
-print(tree)
+--UILibrary.unmount(tree)]]
+
+local dynamicValue = UILibrary.DynamicValue.new('hi')
+
+local newElement = UILibrary.createElement('ScreenGui', {}, {
+    UILibrary.createElement('Frame', {
+        Size = UDim2.new(0, 400, 0, 400),
+        Position = UDim2.new(.5, 0, .5, 0),
+        AnchorPoint = Vector2.new(.5, .5),
+        BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+    }, {
+        UILibrary.createElement('UIListLayout', {
+            Padding = UDim.new(0, 1.5),
+        }),
+        UILibrary.createElement('UIPadding', {
+            PaddingTop = UDim.new(0, 2),
+        }),
+        UILibrary.createElement(createListItem, {Text = dynamicValue})
+    })
+})
+
+UILibrary.mount(newElement, script.Parent)
+
+wait(5)
+
+for i = 1, 100 do
+    dynamicValue:set(i)
+    wait(.1)
+end
+
+--print(tree)

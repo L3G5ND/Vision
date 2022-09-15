@@ -1,11 +1,19 @@
-local StrictTable = require(script.Util.StrictTable)
+local Package = script
 
-local Element = require(script.Element)
-local Component = require(script.Component)
-local Types = require(script.Types)
+local Util = Package.Util
+local StrictTable = require(Util.StrictTable)
 
-local NodeTree = require(script.NodeTree)
-local UIRenderer = require(script.UIRenderer)
+local CustomProps = Package.CustomProps
+local Event = require(CustomProps.Event)
+local Change = require(CustomProps.Change)
+
+local Element = require(Package.Element)
+local Component = require(Package.Component)
+local DynamicValue = require(Package.DynamicValue)
+local Types = require(Package.Types)
+
+local NodeTree = require(Package.NodeTree)
+local UIRenderer = require(Package.UIRenderer)
 
 local Renderer = NodeTree.createRenderer(UIRenderer)
 
@@ -19,6 +27,15 @@ local UILibrary = {
 
     Component = Component,
     component = Component,
+
+    DynamicValue = DynamicValue,
+    dynamicValue = DynamicValue,
+
+    Event = Event,
+    event = Event,
+
+    Changed = Change,
+    changed = Change,
 
     Mount = function(element, parent)
         return Renderer:mountNodeTree(element, parent)
@@ -34,6 +51,13 @@ local UILibrary = {
         return Renderer:updateNodeTree(tree, newElement)
     end,
 
+    Unmount = function(tree)
+        return Renderer:unmountNodeTree(tree)
+    end,
+    unmount = function(tree)
+        return Renderer:unmountNodeTree(tree)
+    end,
+
     Types = Types,
     types = Types,
     
@@ -45,11 +69,4 @@ setmetatable(UILibrary, {
     end,
 })
 
-return StrictTable(UILibrary, {
-    NilIndex = function(tbl, key)
-        error(string.format('UILibrary.%s does not exist', key))
-    end,
-    NewIndex = function(tbl, key, value)
-        error('UILibrary does not accept new values')
-    end
-})
+return StrictTable(UILibrary, 'UILibrary')
