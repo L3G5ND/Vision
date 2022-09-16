@@ -3,12 +3,14 @@ local Package = script
 local Util = Package.Util
 local StrictTable = require(Util.StrictTable)
 
-local CustomProps = Package.CustomProps
-local Event = require(CustomProps.Event)
-local Change = require(CustomProps.Change)
+local Props = Package.Props
+local Event = require(Props.Event)
+local Change = require(Props.Change)
+local Ref = require(Props.Ref)
 
 local Element = require(Package.Element)
 local Component = require(Package.Component)
+local CreateRef = require(Package.CreateRef)
 local DynamicValue = require(Package.DynamicValue)
 local Types = require(Package.Types)
 
@@ -19,53 +21,39 @@ local Renderer = NodeTree.createRenderer(UIRenderer)
 
 local UILibrary = {
 
-    CreateElement = Element.createElement,
     createElement = Element.createElement,
 
-    CreateElementGroup = Element.createElementGroup,
     createElementGroup = Element.createElementGroup,
 
     Component = Component,
-    component = Component,
+    
+    createRef = CreateRef,
 
-    DynamicValue = DynamicValue,
     dynamicValue = DynamicValue,
 
     Event = Event,
-    event = Event,
+    Change = Change,
+    Ref = Ref,
 
-    Changed = Change,
-    changed = Change,
-
-    Mount = function(element, parent)
-        return Renderer:mountNodeTree(element, parent)
-    end,
     mount = function(element, parent)
         return Renderer:mountNodeTree(element, parent)
     end,
 
-    Update = function(tree, newElement)
-        return Renderer:updateNodeTree(tree, newElement)
-    end,
     update = function(tree, newElement)
         return Renderer:updateNodeTree(tree, newElement)
     end,
 
-    Unmount = function(tree)
-        return Renderer:unmountNodeTree(tree)
-    end,
     unmount = function(tree)
         return Renderer:unmountNodeTree(tree)
     end,
 
-    Types = Types,
     types = Types,
     
 }
 
 setmetatable(UILibrary, {
     __call = function(tbl, ...)
-        Element.createElement(...)
+        return Element.createElement(...)
     end,
 })
 

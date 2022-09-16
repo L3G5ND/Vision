@@ -15,6 +15,26 @@ NodeTree.createRenderer = function(renderer)
     return self
 end
 
+function NodeTree:getRootNode(node)
+    local currentNode = node
+    while true do
+        local parentNode = node.parent
+        if parentNode == Types.None then
+            break
+        end
+        wait()
+        currentNode = parentNode
+    end
+    return currentNode
+end
+
+function NodeTree:isRootNode(node)
+    local root = self:getRootNode(node)
+    print(root)
+    print('-')
+    return root == node
+end
+
 function NodeTree:updateChildren(data)
 
     local node = data.node
@@ -24,7 +44,7 @@ function NodeTree:updateChildren(data)
     local updateNodes = {}
 
     for key, child in pairs(node.children) do
-        local newElement = newChildren[key]
+        local newElement = Element.fromKey(newChildren, key)
 
         if not newElement then
             self:unmountNode({
@@ -101,9 +121,14 @@ function NodeTree:updateNode(data)
     local parent = node.data.parent
     local key = node.key
 
-    local typeIsSame = DeepEqual(node.data.element.type, newElement.type)
+    if node.children[Types.ParentKey] then
+        node = node.children[Types.ParentKey]
+    end
 
-    if not typeIsSame then
+    local componentIsSame = DeepEqual(element.component, newElement.component)
+    local isFunction = typeof(newElement.component) == 'function' or typeof(element.component) == 'function'
+    
+    if not componentIsSame and not isFunction then
         self:unmountNode({
             node = node
         })
@@ -125,8 +150,9 @@ function NodeTree:updateNode(data)
                 children = newElement.elements,
                 parent = parent
             })
+
         elseif kind == Element.kind.Function then
-            local newElement = newElement.type(newElement.props)
+            local newElement = newElement.component(newElement.props)
             assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
             self:updateChildren({
                 node = node,
@@ -135,7 +161,7 @@ function NodeTree:updateNode(data)
             })
             
         elseif kind == Element.kind.Component then
-            
+            element.component:_update(self, node, newElement)
         end
 
         node.data.element = newElement
@@ -169,8 +195,9 @@ function NodeTree:mountNode(data)
         })
 
     elseif kind == Element.kind.Function then
-        local newElement = element.type(element.props)
+        local newElement = element.component(element.props)
         assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
+
         self:updateChildren({
             node = node,
             children = newElement,
@@ -178,8 +205,7 @@ function NodeTree:mountNode(data)
         })
 
     elseif kind == Element.kind.Component then
-        self.renderer.RenderComponent(self, node)
-
+        element.component:_mount(self, node)
     end
 
     return node
@@ -194,7 +220,9 @@ function NodeTree:unmountNode(data)
 
     if kind ~= Element.kind.Component then
         for _, node in pairs(node.children) do
-            self:unmountNode({node = node})
+            self:unmountNode({
+                node = node
+            })
         end
         if node.data.eventManager then
             node.data.eventManager:Destroy()
@@ -204,7 +232,7 @@ function NodeTree:unmountNode(data)
         end
         node.data.object:Destroy()
     else
-        --component
+        element.component:_unmount(self)
     end
 
 end
@@ -224,6 +252,8 @@ function NodeTree:mountNodeTree(element, parent)
         parent = parent,
         key = 'root'
     })
+
+    assert(self:getRootNode(tree.root).data.parent == parent, 'Parent property cant be assigned to host nodes')
 
     return tree
 end

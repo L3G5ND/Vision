@@ -8,6 +8,7 @@ local Types = {
     DynamicValue = TypeMarker.Mark('DynamicValue'),
     Event = TypeMarker.Mark('Event'),
     Change = TypeMarker.Mark('Change'),
+    Ref = TypeMarker.Mark('Ref'),
     None = TypeMarker.Mark('None'),
 
     ElementCreator = TypeMarker.Mark('ElementCreator'),

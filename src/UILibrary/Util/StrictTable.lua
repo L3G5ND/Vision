@@ -1,3 +1,6 @@
+local Util = script.Parent
+local Assign = require(Util.Assign)
+
 return function(table, name)
 	name = name or tostring(table)
     local mt = getmetatable(table)
@@ -7,7 +10,7 @@ return function(table, name)
         indexFunc = mt.__index
         newIndexFunc = mt.__newindex
     end
-	return setmetatable(table, {
+	return setmetatable(table, Assign(mt, {
 		__index = function(tbl, key)
             if indexFunc then
                 indexFunc()
@@ -21,5 +24,5 @@ return function(table, name)
             end
 			error(("%s does not accept new values, got %q"):format(name, tostring(key)), 2)
 		end,
-	})
+	}))
 end

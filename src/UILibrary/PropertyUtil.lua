@@ -88,6 +88,10 @@ PropertyUtil.appleEventProperty = function(node, prop, value)
     end
 end
 
+PropertyUtil.appleRefProperty = function(node, ref)
+    ref:set(node.data.object)
+end
+
 PropertyUtil.applyDynamicValueProperty = function(node, prop, value)
     if value.isMap then
         value.DynamicValue:onChanged(function()
@@ -113,6 +117,10 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
 
     local object = node.data.object
 
+    if prop == 'Parent' then
+        return
+    end
+
     if newValue == oldValue then
         return
     end
@@ -120,9 +128,11 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
     local propType = Type.GetType(prop)
     local newValueType = Type.GetType(newValue)
     local oldValueType = Type.GetType(oldValue)
-    
+
     if propType == Types.Event or propType == Types.Change then
         PropertyUtil.appleEventProperty(node, prop, newValue)
+    elseif prop == Types.Ref then
+        PropertyUtil.appleRefProperty(node, newValue)
     elseif newValueType == Types.DynamicValue then
         PropertyUtil.applyDynamicValueProperty(node, prop, newValue)
     elseif PropertyUtil.IsNormalProperty(object.ClassName, prop) then

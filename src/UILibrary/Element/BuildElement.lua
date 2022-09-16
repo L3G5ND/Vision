@@ -1,10 +1,10 @@
 local Package = script.Parent.Parent
 
-local ElementContainer = Package.ElementContainer
+local Components = Package.Components
 
 local BuildFunctions = {}
 
-for _, container in pairs(ElementContainer:GetChildren()) do
+local function addBuildFunction(container)
     local name = container.Name
     local src = require(container)
     if typeof(src) == 'table' then
@@ -13,6 +13,13 @@ for _, container in pairs(ElementContainer:GetChildren()) do
         end
     end
     BuildFunctions[name] = src
+end
+
+addBuildFunction(Components.DefualtComponents)
+for _, container in pairs(Components:GetChildren()) do
+    if container ~= Components.DefualtComponents then
+        addBuildFunction(container)
+    end
 end
 
 setmetatable(BuildFunctions, {

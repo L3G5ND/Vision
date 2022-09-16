@@ -1,19 +1,24 @@
 local Package = script.Parent
 
+local Util = Package.Util
+local Assign = require(Util.Assign)
+
 local Element = require(Package.Element)
 local PropertyUtil = require(Package.PropertyUtil)
+local Types = require(Package.Types)
 
 local UIRenderer = {}
 
 UIRenderer.Render = function(nodeTree, node)
     local element = node.data.element
     local parent = node.data.parent
+    local props = element.props
 
-    local object = Element.build(element.type)
+    local object = Element.build(element.component)
     object.Name = node.key
     node.data.object = object
-
-    PropertyUtil.applyProperties(node, element.props)
+    
+    PropertyUtil.applyProperties(node, props)
 
     nodeTree:updateChildren({
         node = node,
@@ -21,18 +26,21 @@ UIRenderer.Render = function(nodeTree, node)
         parent = object
     })
 
-    if node.data.eventManager then
-        node.data.eventManager:Resume()
+    if props.Parent then
+        node.data.parent = props.Parent
     end
 
     object.Parent = node.data.parent
+
+    if node.data.eventManager then
+        node.data.eventManager:Resume()
+    end
 end
 
 UIRenderer.Update = function(nodeTree, node, newElement)
     local oldProps = node.data.element.props
 	local newProps = newElement.props
-
-    print(1)
+    
     if node.data.eventManager then
         node.data.eventManager:Suspend()
     end
@@ -47,6 +55,12 @@ UIRenderer.Update = function(nodeTree, node, newElement)
             parent = node.data.object
         })
 	end
+
+    if newProps.Parent then
+        if not newProps.Parent == node.data.parent then
+            node.data.parent = newProps.Parent
+        end
+    end
 
     if node.data.eventManager then
         node.data.eventManager:Resume()
