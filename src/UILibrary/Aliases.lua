@@ -2,12 +2,10 @@ local Package = script.Parent
 
 local UILibrary = require(Package.UILibrary)
 
--- Aliases
+local Aliases = {}
 
-UILibrary.component = UILibrary.Component
+Aliases.component = UILibrary.Component
 
-UILibrary.Types = UILibrary.types
+Aliases.Types = UILibrary.types
 
---
-
-return UILibrary
+return Aliases
