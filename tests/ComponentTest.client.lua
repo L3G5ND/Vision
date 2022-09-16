@@ -60,6 +60,6 @@ local element = UILibrary.createElement(Test, {}, {})
 
 local tree = UILibrary.mount(element, script.Parent)
 
-task.wait(5)
+task.wait(10)
 
 UILibrary.unmount(tree)
