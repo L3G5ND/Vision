@@ -149,23 +149,20 @@ function NodeTree:updateNode(data)
 
         elseif kind == Element.kind.Function then
             local newElement = newElement.component(newElement.props)
-            assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
+            assert(Type.GetType(newElement) == Types.Element, 'Element function must return a valid Element')
 
             self:updateNode({
                 node = node,
                 newElement = newElement
             })
-            --[[
-            self:updateChildren({
-                node = node,
-                children = newElement,
-                parent = node.data.parent
-            })]]
             
         elseif kind == Element.kind.Component then
             element.component:_update(self, node, newElement)
-        end
 
+        elseif kind == Element.kind.Wrapped then
+            node = self.renderer.Update(self, node, newElement)
+
+        end
         node.data.element = newElement
 
         return node
@@ -183,7 +180,7 @@ function NodeTree:mountNode(data)
         parent = parent,
         key = key
     })
-
+    
     local kind = element.kind
     
     if kind == Element.kind.Normal then
@@ -198,7 +195,7 @@ function NodeTree:mountNode(data)
 
     elseif kind == Element.kind.Function then
         local newElement = element.component(element.props)
-        assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
+        assert(Type.GetType(newElement) == Types.Element, 'Element function must return a valid Element')
 
         self:updateChildren({
             node = node,
@@ -208,6 +205,10 @@ function NodeTree:mountNode(data)
 
     elseif kind == Element.kind.Component then
         element.component:_mount(self, node)
+
+    elseif kind == Element.kind.Wrapped then
+        self.renderer.Render(self, node, true)
+
     end
 
     return node
@@ -241,7 +242,7 @@ end
 
 function NodeTree:mountNodeTree(element, parent)
 
-    assert(Type.GetType(element) == Types.ElementCreator, 'element not a element')
+    assert(Type.GetType(element) == Types.Element, 'element not a element')
     assert(parent, 'parent cant be nil')
 
     local tree = {

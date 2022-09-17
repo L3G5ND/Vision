@@ -15,13 +15,9 @@ return function (component, props, children)
 
     assert(typeof(props) == 'table', string.format('props must be a table, got %s', typeof(props)))
     assert(typeof(children) == 'table', string.format('children must be a table, got %s', typeof(children)))
+    assert(typeof(component) == 'Instance', string.format('componenet must be a instance, got %s', typeof(component)))
 
-    local kind = ElementKind.Normal
-    if Type.GetType(component) == 'function' then
-        kind = ElementKind.Function
-    elseif Type.GetType(component) == ElementKind.Component then
-        kind = ElementKind.Component
-    end
+    local kind = ElementKind.Wrapped
 
     local element = setmetatable({
 

@@ -13,6 +13,7 @@ local Vision = {
 
     createElement = Element.createElement,
     createElementGroup = Element.createElementGroup,
+    wrapComponent = Element.wrapComponent,
     Component = require(Package.Component),
     
     createRef = require(Package.CreateRef),

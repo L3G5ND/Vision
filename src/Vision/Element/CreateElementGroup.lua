@@ -18,7 +18,7 @@ return function(elements)
     }, {
         __newindex = function() end
     })
-    Type.SetType(elementGroup, Types.ElementCreator)
+    Type.SetType(elementGroup, Types.Element)
 
     return elementGroup
 end

@@ -11,7 +11,7 @@ local Types = {
     Ref = TypeMarker.Mark('Ref'),
     None = TypeMarker.Mark('None'),
 
-    ElementCreator = TypeMarker.Mark('ElementCreator'),
+    Element = TypeMarker.Mark('Element'),
     NodeTree = TypeMarker.Mark('NodeTree'),
     Node = TypeMarker.Mark('Node'),
     ParentKey = TypeMarker.Mark('ParentKey'),

@@ -87,7 +87,7 @@ function Component:_mount(nodeTree, node)
     self:beforeMount()
 
     local newElement = self:render(props)
-    assert(Type.GetType(newElement) == Types.ElementCreator, 'Component:render() must return a valid ElementCreator')
+    assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
     nodeTree:updateChildren({
         node = node,
@@ -123,7 +123,7 @@ function Component:update()
     self:beforeUpdate()
 
     local newElement = self:render(self.props)
-    assert(Type.GetType(newElement) == Types.ElementCreator, 'Component:render() must return a valid ElementCreator')
+    assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
     self.nodeTree:updateNode({
         node = self.node,
