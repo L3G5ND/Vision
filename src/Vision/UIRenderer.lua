@@ -9,17 +9,20 @@ local Types = require(Package.Types)
 
 local UIRenderer = {}
 
-UIRenderer.Render = function(nodeTree, node, dontBuild)
+UIRenderer.Render = function(nodeTree, node, clone)
     local element = node.data.element
     local parent = node.data.parent
     local props = element.props
 
     local object
-    if not dontBuild then
+    if not clone then
         object = Element.build(element.component)
         object.Name = node.key
     else
-        object = node.data.element.component
+        object = node.data.element.component:clone()
+        for _, child in pairs(object:GetChildren()) do
+            child:Destroy()
+        end
     end
     
     node.data.object = object

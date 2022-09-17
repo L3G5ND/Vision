@@ -2,7 +2,7 @@ local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
 
-local UI = Instance.new('ScreenGui', script.Parent)
+local UI = Instance.new('ScreenGui')
 UI.IgnoreGuiInset = true
 UI.ResetOnSpawn = false
 
