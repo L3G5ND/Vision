@@ -3,17 +3,17 @@ local Package = script
 local Util = Package.Util
 local StrictTable = require(Util.StrictTable)
 
-local UILibrary = require(Package.UILibrary)
+local Vision = require(Package.Vision)
 local Aliases = require(Package.Aliases)
 
 for alias, v in pairs(Aliases) do
-    UILibrary[alias] = v
+    Vision[alias] = v
 end
 
-setmetatable(UILibrary, {
+setmetatable(Vision, {
     __call = function(tbl, ...)
-        return UILibrary.createElement(...)
+        return Vision.createElement(...)
     end,
 })
 
-return StrictTable(UILibrary, 'UILibrary')
+return StrictTable(Vision, 'UILibrary')

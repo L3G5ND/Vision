@@ -1,23 +1,23 @@
 local RS = game:GetService('ReplicatedStorage')
 
-local UILibrary = require(RS.UILibrary)
+local Vision = require(RS.Vision)
 
-local partRef = UILibrary.createRef()
+local partRef = Vision.createRef()
 
-local element = UILibrary.createElement("Part", {
+local element = Vision.createElement("Part", {
     Anchored = true,
     Position = Vector3.new(0, 10.5, 0),
-    [UILibrary.Ref] = partRef
+    [Vision.Ref] = partRef
 }, {
-    SurfaceGui = UILibrary.createElement("SurfaceGui", {
+    SurfaceGui = Vision.createElement("SurfaceGui", {
         Parent = script.Parent,
         Adornee = partRef
     }, {
-        TextLabel = UILibrary.createElement("TextLabel", {
+        TextLabel = Vision.createElement("TextLabel", {
             Text = 'Hello!',
             Size = UDim2.new(1, 0, 1, 0)
         })
     })
 })
 
-local tree = UILibrary.mount(element, workspace)
+local tree = Vision.mount(element, workspace)

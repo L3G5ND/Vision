@@ -9,7 +9,7 @@ local UIRenderer = require(Package.UIRenderer)
 
 local Renderer = NodeTree.createRenderer(UIRenderer)
 
-local UILibrary = {
+local Vision = {
 
     createElement = Element.createElement,
     createElementGroup = Element.createElementGroup,
@@ -36,4 +36,4 @@ local UILibrary = {
     
 }
 
-return UILibrary
+return Vision

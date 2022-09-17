@@ -4,8 +4,8 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "UILibrary": {
-        "$path": "src/UILibrary"
+      "Vision": {
+        "$path": "src/Vision"
       }
     },
 

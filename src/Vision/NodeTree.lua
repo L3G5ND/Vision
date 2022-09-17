@@ -22,17 +22,13 @@ function NodeTree:getRootNode(node)
         if parentNode == Types.None then
             break
         end
-        wait()
         currentNode = parentNode
     end
     return currentNode
 end
 
 function NodeTree:isRootNode(node)
-    local root = self:getRootNode(node)
-    print(root)
-    print('-')
-    return root == node
+    return node.key == 'root'
 end
 
 function NodeTree:updateChildren(data)
@@ -45,7 +41,7 @@ function NodeTree:updateChildren(data)
 
     for key, child in pairs(node.children) do
         local newElement = Element.fromKey(newChildren, key)
-
+        
         if not newElement then
             self:unmountNode({
                 node = child
@@ -127,13 +123,13 @@ function NodeTree:updateNode(data)
 
     local componentIsSame = DeepEqual(element.component, newElement.component)
     local isFunction = typeof(newElement.component) == 'function' or typeof(element.component) == 'function'
-    
+
     if not componentIsSame and not isFunction then
         self:unmountNode({
             node = node
         })
         return self:mountNode({
-            element = newElement, 
+            element = newElement,
             parent = parent,
             key = key
         })
@@ -154,11 +150,17 @@ function NodeTree:updateNode(data)
         elseif kind == Element.kind.Function then
             local newElement = newElement.component(newElement.props)
             assert(Type.GetType(newElement) == Types.ElementCreator, 'Element function must return a valid ElementCreator')
+
+            self:updateNode({
+                node = node,
+                newElement = newElement
+            })
+            --[[
             self:updateChildren({
                 node = node,
                 children = newElement,
                 parent = node.data.parent
-            })
+            })]]
             
         elseif kind == Element.kind.Component then
             element.component:_update(self, node, newElement)
