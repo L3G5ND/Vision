@@ -17,11 +17,11 @@ UIRenderer.Render = function(nodeTree, node, dontBuild)
     local object
     if not dontBuild then
         object = Element.build(element.component)
+        object.Name = node.key
     else
-        object = node.data.element.component:Clone()
+        object = node.data.element.component
     end
     
-    object.Name = node.key
     node.data.object = object
     
     PropertyUtil.applyProperties(node, props)

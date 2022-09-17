@@ -8,7 +8,8 @@ local elementKinds = {
     Group = TypeMarker.Mark('Group'),
     Function = TypeMarker.Mark('Function'),
     Component = TypeMarker.Mark('Component'),
-    Wrapped = TypeMarker.Mark('Wrapped')
+    Wrapped = TypeMarker.Mark('Wrapped'),
+    WrappedSingle = TypeMarker.Mark('WrappedSingle')
 }
 
 return setmetatable({

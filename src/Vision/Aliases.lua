@@ -4,10 +4,15 @@ local Vision = require(Package.Vision)
 
 local Aliases = {}
 
+Aliases.element = Vision.createElement
+Aliases.elementGroup = Vision.createElementGroup
 Aliases.wrap = Vision.wrapComponent
+Aliases.wrapSingle = Vision.wrapSingleComponent
 
 Aliases.component = Vision.Component
 
-Aliases.Types = Vision.types
+Aliases.mountTree = Vision.mount
+Aliases.unmountTree = Vision.unmount
+Aliases.updateTree = Vision.update
 
 return Aliases

@@ -162,6 +162,9 @@ function NodeTree:updateNode(data)
         elseif kind == Element.kind.Wrapped then
             node = self.renderer.Update(self, node, newElement)
 
+        elseif kind == Element.kind.WrappedSingle then
+            node = self.renderer.Update(self, node, newElement)
+
         end
         node.data.element = newElement
 
@@ -209,6 +212,9 @@ function NodeTree:mountNode(data)
     elseif kind == Element.kind.Wrapped then
         self.renderer.Render(self, node, true)
 
+    elseif kind == Element.kind.WrappedSingle then
+        self.renderer.Render(self, node, true)
+
     end
 
     return node
@@ -250,10 +256,11 @@ function NodeTree:mountNodeTree(element, parent)
     }
     Type.SetType(tree, Types.NodeTree)
 
+    local key = element.kind == (Element.kind.Wrapped or element.kind == Element.kind.WrappedSingle) and element.component.Name or 'root'
     tree.root = self:mountNode({
         element = element, 
         parent = parent,
-        key = 'root'
+        key =  key
     })
 
     assert(self:getRootNode(tree.root).data.parent == parent, 'Parent property cant be assigned to host nodes')

@@ -14,6 +14,8 @@ local Vision = {
     createElement = Element.createElement,
     createElementGroup = Element.createElementGroup,
     wrapComponent = Element.wrapComponent,
+    wrapSingleComponent = Element.wrapSingleComponent,
+
     Component = require(Package.Component),
     
     createRef = require(Package.CreateRef),
@@ -33,7 +35,7 @@ local Vision = {
         return Renderer:unmountNodeTree(tree)
     end,
 
-    types = require(Package.Types),
+    Types = require(Package.Types),
     
 }
 

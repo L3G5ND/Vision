@@ -3,13 +3,12 @@ local Element = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
-local Assign = require(Util.Assign)
 
 local Types = require(Package.Types)
 
 local ElementKind = require(Element.ElementKind)
 
-local function wrapComponent(component, props, children)
+return function (component, props, children)
 
     if not props then props = {} end
     if not children then children = {} end
@@ -18,20 +17,7 @@ local function wrapComponent(component, props, children)
     assert(typeof(children) == 'table', string.format('children must be a table, got %s', typeof(children)))
     assert(typeof(component) == 'Instance', string.format('componenet must be a instance, got %s', typeof(component)))
 
-    local kind = ElementKind.Wrapped
-
-    local componentChildren = {}
-    for _, child in pairs(component:GetChildren()) do
-        componentChildren[child.name] = wrapComponent(child, {}, {})
-    end
-    for _, child in pairs(children) do
-        local hasOverwrite = false
-        for key, childComponent in pairs(componentChildren) do
-            if childComponent.component.Name == child.component.Name then
-                componentChildren[key] = child
-            end
-        end
-    end
+    local kind = ElementKind.WrappedSingle
 
     local element = setmetatable({
 
@@ -48,5 +34,3 @@ local function wrapComponent(component, props, children)
 
     return element
 end
-
-return wrapComponent
