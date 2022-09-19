@@ -4,7 +4,7 @@ local Components = Package.Components
 
 local BuildFunctions = {}
 
-local function addBuildFunction(container)
+local function addBuildFunctions(container)
     local name = container.Name
     local src = require(container)
     if typeof(src) == 'table' then
@@ -15,12 +15,7 @@ local function addBuildFunction(container)
     BuildFunctions[name] = src
 end
 
-addBuildFunction(Components.DefualtComponents)
-for _, container in pairs(Components:GetChildren()) do
-    if container ~= Components.DefualtComponents then
-        addBuildFunction(container)
-    end
-end
+addBuildFunctions(Package.DefualtComponents)
 
 setmetatable(BuildFunctions, {
     __index = function(tbl, key)
