@@ -241,7 +241,7 @@ function NodeTree:unmountNode(data)
         end
         node.data.object:Destroy()
     else
-        element.component:_unmount(self)
+        element.component:_unmount(self, node)
     end
 
 end

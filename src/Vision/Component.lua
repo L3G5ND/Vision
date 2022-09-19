@@ -10,6 +10,7 @@ local Element = require(Package.Element)
 
 local Component = {}
 
+Component.defaultProps = {}
 
 function Component:init()
     
@@ -54,12 +55,11 @@ end
 
 
 Component.new = function(name)
-
     local self = setmetatable({
         name = name,
     }, {
         __tostring = function(self)
-            return self.name
+            return '[Vision] Component - '.. self.name
         end    
     })
     Type.SetType(self, Element.kind.Component)
@@ -74,19 +74,28 @@ Component.new = function(name)
 end
 
 function Component:_mount(nodeTree, node)
-
     local element = node.data.element
     local props = element.props
 
-    self.props = Assign({}, props)
-    self.node = node
-    self.nodeTree = nodeTree
+    local component = setmetatable({}, getmetatable(self))
 
-    self:init(props)
+    for key, value in pairs(self) do
+		if key ~= 'new' then
+			component[key] = value
+		end
+	end
 
-    self:beforeMount()
+    node.data._component = component
+    
+    component.props = Assign({}, self.defaultProps, props)
+    component.node = node
+    component.nodeTree = nodeTree
 
-    local newElement = self:render(props)
+    component:init(props)
+
+    component:beforeMount()
+
+    local newElement = component:render(props)
     assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
     nodeTree:updateChildren({
@@ -95,22 +104,24 @@ function Component:_mount(nodeTree, node)
         parent = node.data.parent
     })
 
-    self:onMount()
+    component:onMount()
 end
 
-function Component:_unmount(nodeTree)
-    self:beforeUnmount()
+function Component:_unmount(nodeTree, node)
+    local component = self.data._component
 
-    for _, node in pairs(self.node.children) do
+    component:beforeUnmount()
+
+    for _, node in pairs(component.node.children) do
         nodeTree:unmountNode({
             node = node
         })
     end
-    if self.node.data.eventManager then
-        self.node.data.eventManager:Destroy()
+    if component.node.data.eventManager then
+        component.node.data.eventManager:Destroy()
     end
 
-    self:onUnmount()
+    component:onUnmount()
 end
 
 
