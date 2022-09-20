@@ -1,6 +1,7 @@
 local Package = script.Parent.Parent
 
-local Components = Package.Components
+local Util = Package.Util
+local Assert = require(Util.Assert)
 
 local BuildFunctions = {}
 
@@ -21,7 +22,7 @@ setmetatable(BuildFunctions, {
     __index = function(tbl, key)
         return function()
             local success, instance = pcall(Instance.new, key)
-            assert(success, string.format('element is not a valid instnace, got %s', key))
+            Assert(success, 'Invalid argument #1 (Must be a valid Instance ClassName)')
             return instance
         end
     end

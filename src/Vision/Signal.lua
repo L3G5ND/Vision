@@ -1,3 +1,8 @@
+local Package = script.Parent
+
+local Util = Package.Util
+local Assert = require(Util.Assert)
+
 local signal = {}
 
 signal.new = function()
@@ -7,7 +12,7 @@ signal.new = function()
 end
 
 function signal:Connect(callback)
-    assert(typeof(callback) == 'function', string.format("callback must be a function, got %s", tostring(callback)))
+    Assert(typeof(callback) == 'function', 'Invalid argument #1 (Must be of type \'function\')', 4)
 
     local index = #self._connections+1
     self._connections[index] = callback

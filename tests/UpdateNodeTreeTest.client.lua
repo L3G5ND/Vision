@@ -62,7 +62,7 @@ local tree = Vision.mount(Vision.createElement(createList, {num = maxNum}, {}), 
 task.wait(10)
 
 for i = 0, maxNum*times-1 do
-    Vision.update(tree, Vision.createElement(createList, {num = i%maxNum+1}, {}))
+    tree:update(Vision.createElement(createList, {num = i%maxNum+1}, {}))
     wait(.1)
 end
 

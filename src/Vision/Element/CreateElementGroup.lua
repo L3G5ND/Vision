@@ -3,6 +3,7 @@ local Element = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
+local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 
@@ -10,7 +11,7 @@ local ElementKind = require(Element.ElementKind)
 
 return function(elements)
 
-    assert(typeof(elements) == 'table', string.format('Elements must be a table, got %s', typeof(elements)))
+    Assert(typeof(elements) == 'table', 'Invalid argument #1 (Must be of type \'table\')')
 
     local elementGroup = setmetatable({
         elements = elements,

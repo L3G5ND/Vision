@@ -1,3 +1,6 @@
+local Util = script.Parent
+local Assert = require(Util.Assert)
+
 local Type = {}
 
 Type.GetType = function(content)
@@ -14,7 +17,7 @@ Type.GetType = function(content)
 end
 
 Type.SetType = function(tbl, type)
-    assert(typeof(tbl) == 'table', string.format('Table expected, got %s', typeof(tbl)))
+    Assert(typeof(tbl) == 'table', 'Invalid argument #1 (Must be of type \'table\')')
     if not getmetatable(tbl) then
         setmetatable(tbl, {})
     end

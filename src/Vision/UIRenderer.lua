@@ -9,7 +9,7 @@ local Types = require(Package.Types)
 
 local UIRenderer = {}
 
-UIRenderer.Render = function(nodeTree, node, clone)
+UIRenderer.Render = function(renderer, node, clone)
     local element = node.data.element
     local parent = node.data.parent
     local props = element.props
@@ -29,7 +29,7 @@ UIRenderer.Render = function(nodeTree, node, clone)
     
     PropertyUtil.applyProperties(node, props)
 
-    nodeTree:updateChildren({
+    renderer:updateChildren({
         node = node,
         children = element.children,
         parent = object
@@ -46,7 +46,7 @@ UIRenderer.Render = function(nodeTree, node, clone)
     end
 end
 
-UIRenderer.Update = function(nodeTree, node, newElement)
+UIRenderer.Update = function(renderer, node, newElement)
     local oldProps = node.data.element.props
 	local newProps = newElement.props
     
@@ -58,7 +58,7 @@ UIRenderer.Update = function(nodeTree, node, newElement)
 
     local children = newElement.children
 	if children or node.data.element.children then
-        nodeTree:updateChildren({
+        renderer:updateChildren({
             node = node,
             children = children,
             parent = node.data.object

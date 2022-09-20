@@ -4,6 +4,7 @@ local Util = Package.Util
 local Type = require(Util.Type)
 local TypeMarker = require(Util.TypeMarker)
 local Assign = require(Util.Assign)
+local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 local Element = require(Package.Element)
@@ -59,7 +60,7 @@ Component.new = function(name)
         name = name,
     }, {
         __tostring = function(self)
-            return '[Vision] Component - '.. self.name
+            return '[Vision] - Component: '.. self.name
         end    
     })
     Type.SetType(self, Element.kind.Component)
@@ -96,7 +97,7 @@ function Component:_mount(nodeTree, node)
     component:beforeMount()
 
     local newElement = component:render(props)
-    assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
+    Assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
     nodeTree:updateChildren({
         node = node,
@@ -134,7 +135,7 @@ function Component:update()
     self:beforeUpdate()
 
     local newElement = self:render(self.props)
-    assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
+    Assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
     self.nodeTree:updateNode({
         node = self.node,

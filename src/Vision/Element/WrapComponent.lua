@@ -4,6 +4,7 @@ local Element = script.Parent
 local Util = Package.Util
 local Type = require(Util.Type)
 local Assign = require(Util.Assign)
+local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 
@@ -14,9 +15,9 @@ local function wrapComponent(component, props, children)
     if not props then props = {} end
     if not children then children = {} end
 
-    assert(typeof(props) == 'table', string.format('props must be a table, got %s', typeof(props)))
-    assert(typeof(children) == 'table', string.format('children must be a table, got %s', typeof(children)))
-    assert(typeof(component) == 'Instance', string.format('componenet must be a instance, got %s', typeof(component)))
+    Assert(typeof(component) == 'Instance', 'Invalid argument #1 (Must be a valid Roblox Instance)')
+    Assert(typeof(props) == 'table', 'Invalid argument #2 (Must be of type \'table\')')
+    Assert(typeof(children) == 'table', 'Invalid argument #3 (Must be of type \'table\')')
 
     local kind = ElementKind.Wrapped
 

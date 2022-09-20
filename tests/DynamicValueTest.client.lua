@@ -2,7 +2,7 @@ local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
 
-local dynamicValue = Vision.dynamicValue.new('a')
+local dynamicValue = Vision.dynamicValue.new('Hello!')
 
 local newElement = Vision.createElement('ScreenGui', {}, {
     Vision.createElement('Frame', {
