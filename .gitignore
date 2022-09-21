@@ -1,8 +1,10 @@
 # Project place file
-/UI Library.rbxlx
+/*.rbxlx
+/*.rbxl
+
+/*.rbxm
+/*.rbxl
 
 # Roblox Studio lock files
 /*.rbxlx.lock
 /*.rbxl.lock
-
-/*.rbxl

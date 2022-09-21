@@ -1,0 +1,26 @@
+{
+    "name": "Vision Tests",
+    "tree": {
+      "$className": "DataModel",
+  
+      "ReplicatedStorage": {
+        "Vision": {
+          "$path": "src/Vision"
+        }
+      },
+  
+      "ServerScriptService": {
+  
+      },
+  
+      "StarterPlayer": {
+        "StarterPlayerScripts": {
+          
+        }
+      },
+  
+      "StarterGui": {
+        "$path": "tests"
+      }
+    }
+  }

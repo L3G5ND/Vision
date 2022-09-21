@@ -1,27 +1,6 @@
 {
   "name": "Vision",
   "tree": {
-    "$className": "DataModel",
-
-    "ReplicatedStorage": {
-      "Vision": {
-        "$path": "src/Vision"
-      }
-    },
-
-    "ServerScriptService": {
-
-    },
-
-    "StarterPlayer": {
-      "StarterPlayerScripts": {
-        
-      }
-    },
-
-    "StarterGui": {
-      "$ignoreUnknownInstances": true,
-      "$path": "tests"
-    }
+    "$path": "src/Vision"
   }
 }
