@@ -120,7 +120,7 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
     if prop == 'Parent' then
         return
     end
-
+    
     if newValue == oldValue then
         return
     end

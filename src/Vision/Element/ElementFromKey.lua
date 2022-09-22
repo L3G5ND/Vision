@@ -11,7 +11,7 @@ return function(elements, key)
 		return nil
 	end
 
-	if Type.GetType(elements) == Types.ElementCreator then
+	if Type.GetType(elements) == Types.Element then
 		if key == Types.ParentKey then
 			return elements
 		end

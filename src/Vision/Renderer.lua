@@ -25,15 +25,10 @@ function Renderer.mount(element, parent)
     })
     Type.SetType(tree, Types.Renderer)
 
-    local key = 
-    (element.kind == Element.kind.Wrapped) or (element.kind == Element.kind.WrappedSingle) and 
-    element.component.Name or
-    Renderer.RootKey
-
     tree.root = tree:mountNode({
         element = element, 
         parent = parent,
-        key =  key
+        key =  Renderer.RootKey
     })
 
     Assert(tree:getRootNode().data.parent == parent, 'Parent property cannot be assigned to Host Nodes')
@@ -74,6 +69,7 @@ function Renderer:mountNode(data)
     local element = data.element
     local parent = data.parent
     local key = data.key
+    local childKey = data.childKey or key
 
     local node = {
         parent = Types.None,
@@ -113,10 +109,10 @@ function Renderer:mountNode(data)
         element.component:_mount(self, node)
 
     elseif kind == Element.kind.Wrapped then
-        UIRenderer.Render(self, node, true)
+        UIRenderer.Render(self, node)
 
     elseif kind == Element.kind.WrappedSingle then
-        UIRenderer.Render(self, node, true)
+        UIRenderer.Render(self, node)
 
     end
 
@@ -157,10 +153,7 @@ function Renderer:updateNode(data)
 
     local parent = node.data.parent
     local key = node.key
-
-    if node.children[Types.ParentKey] then
-        node = node.children[Types.ParentKey]
-    end
+    local childKey = node.childKey
 
     local componentIsSame = DeepEqual(element.component, newElement.component)
     local isFunction = typeof(newElement.component) == 'function' or typeof(element.component) == 'function'
@@ -172,7 +165,8 @@ function Renderer:updateNode(data)
         return self:mountNode({
             element = newElement,
             parent = parent,
-            key = key
+            key = key,
+            childKey = childKey
         })
 
     else
@@ -192,13 +186,14 @@ function Renderer:updateNode(data)
             local newElement = newElement.component(newElement.props)
             Assert(Type.GetType(newElement) == Types.Element, 'Element function must return a valid Element')
 
-            self:updateNode({
+            self:updateChildren({
                 node = node,
-                newElement = newElement
+                children = newElement,
+                parent = parent
             })
             
         elseif kind == Element.kind.Component then
-            element.component:_update(self, node, newElement)
+            element.component:update(self, node, newElement)
 
         elseif kind == Element.kind.Wrapped then
             node = UIRenderer.Update(self, node, newElement)
@@ -223,7 +218,7 @@ function Renderer:updateChildren(data)
 
     for key, child in pairs(node.children) do
         local newElement = Element.fromKey(newChildren, key)
-        
+
         if not newElement then
             self:unmountNode({
                 node = child
@@ -248,11 +243,13 @@ function Renderer:updateChildren(data)
             if key == Types.ParentKey then
                 _key = node.key
             end
+
             local childNode = self:mountNode({
                 element = child,
                 parent = parent,
                 key = _key,
             })
+
             childNode.parent = node
             node.children[key] = childNode
         end

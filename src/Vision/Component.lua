@@ -137,20 +137,13 @@ function Component:update()
     local newElement = self:render(self.props)
     Assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
-    self.nodeTree:updateNode({
-        node = self.node,
-        newElement = newElement
-    })
-
-    self:onUpdate()
-end
-
-function Component:_update(nodeTree, newElement)
-    nodeTree:updateChildren({
+    self.nodeTree:updateChildren({
         node = self.node,
         children = newElement,
         parent = self.node.data.parent
     })
+
+    self:onUpdate()
 end
 
 return Component

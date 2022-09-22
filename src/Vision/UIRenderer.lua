@@ -9,24 +9,33 @@ local Types = require(Package.Types)
 
 local UIRenderer = {}
 
-UIRenderer.Render = function(renderer, node, clone)
+UIRenderer.Render = function(renderer, node)
     local element = node.data.element
     local parent = node.data.parent
     local props = element.props
+    local kind = element.kind
 
-    local object
-    if not clone then
-        object = Element.build(element.component)
-        object.Name = node.key
-    else
+    local object 
+    if (kind == Element.kind.Wrapped) or (kind == Element.kind.WrappedSingle) then
         object = node.data.element.component:clone()
         for _, child in pairs(object:GetChildren()) do
             child:Destroy()
         end
+    else
+        object = Element.build(element.component)
     end
     
     node.data.object = object
-    
+
+    local name = node.key
+    if props.Name then
+        name = props.Name
+    end
+    if typeof(node.key) == 'string' then
+        name = node.key
+    end
+    props.Name = name
+
     PropertyUtil.applyProperties(node, props)
 
     renderer:updateChildren({
@@ -53,6 +62,15 @@ UIRenderer.Update = function(renderer, node, newElement)
     if node.data.eventManager then
         node.data.eventManager:Suspend()
     end
+
+    local name = node.key
+    if newProps.Name then
+        name = newProps.Name
+    end
+    if typeof(node.key) == 'string' then
+        name = node.key
+    end
+    newProps.Name = name
 
     PropertyUtil.updateProperties(node, newProps)
 
