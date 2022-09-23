@@ -45,6 +45,9 @@ VisionAPI.onChange = Vision.Change
 VisionAPI.Ref = Vision.Ref
 VisionAPI.ref = Vision.Ref
 
+VisionAPI.Cascade = Vision.Cascade
+VisionAPI.cascade = Vision.Cascade
+
 
 VisionAPI.Renderer = Vision.Renderer
 VisionAPI.renderer = Vision.Renderer
@@ -62,4 +65,4 @@ setmetatable(VisionAPI, {
         return Vision.createElement(...)
     end,
 })
-return StrictTable(VisionAPI, 'UILibrary')
+return StrictTable(VisionAPI, 'Vision')

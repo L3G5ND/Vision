@@ -1,5 +1,8 @@
 local Package = script.Parent
 
+local Props = Package.Props
+local CascadeProp = require(Props.Cascade)
+
 local Util = Package.Util
 local Type = require(Util.Type)
 local DeepEqual = require(Util.DeepEqual)
@@ -69,12 +72,13 @@ function Renderer:mountNode(data)
     local element = data.element
     local parent = data.parent
     local key = data.key
-    local childKey = data.childKey or key
+    local cascade = data.cascade or {}
 
     local node = {
         parent = Types.None,
         children = {},
         key = key,
+        cascade = cascade,
         data = {
             parent = parent,
             element = element,
@@ -82,7 +86,15 @@ function Renderer:mountNode(data)
         },
     }
     Type.SetType(node, Types.Node)
-    
+
+    local cascadeProp = element.props[CascadeProp]
+    if cascadeProp then
+        Assert(typeof(cascadeProp) == 'table', 'Invalid property ['..tostring(Types.Cascader)..'] (type \'table\' expected)')
+        for key, value in pairs(cascadeProp) do
+            node.cascade[key] = value
+        end
+    end
+
     local kind = element.kind
     
     if kind == Element.kind.Normal then
@@ -153,7 +165,7 @@ function Renderer:updateNode(data)
 
     local parent = node.data.parent
     local key = node.key
-    local childKey = node.childKey
+    local cascade = node.cascade
 
     local componentIsSame = DeepEqual(element.component, newElement.component)
     local isFunction = typeof(newElement.component) == 'function' or typeof(element.component) == 'function'
@@ -166,10 +178,18 @@ function Renderer:updateNode(data)
             element = newElement,
             parent = parent,
             key = key,
-            childKey = childKey
+            cascade = cascade
         })
 
     else
+        local cascadeProp = newElement.props[CascadeProp]
+        if cascadeProp then
+            Assert(typeof(cascadeProp) == 'table', 'Invalid property ['..tostring(Types.Cascader)..'] (type \'table\' expected)')
+            for key, value in pairs(cascadeProp) do
+                node.cascade[key] = value
+            end
+        end
+
         local kind = newElement.kind
 
         if kind == Element.kind.Normal then
@@ -193,7 +213,7 @@ function Renderer:updateNode(data)
             })
             
         elseif kind == Element.kind.Component then
-            element.component:update(self, node, newElement)
+            element.component.update(node.data._component)
 
         elseif kind == Element.kind.Wrapped then
             node = UIRenderer.Update(self, node, newElement)
@@ -248,6 +268,7 @@ function Renderer:updateChildren(data)
                 element = child,
                 parent = parent,
                 key = _key,
+                cascade = node.cascade
             })
 
             childNode.parent = node

@@ -9,6 +9,8 @@ local Assert = require(Util.Assert)
 local Types = require(Package.Types)
 local Element = require(Package.Element)
 
+local InternalKey = TypeMarker.Mark('ComponentInternalKey')
+
 local Component = {}
 
 Component.defaultProps = {}
@@ -80,17 +82,21 @@ function Component:_mount(nodeTree, node)
 
     local component = setmetatable({}, getmetatable(self))
 
+    node.data._component = component
+
     for key, value in pairs(self) do
-		if key ~= 'new' then
+		if key ~= 'new' and key ~= '_mount' and key ~= '_unmount' then
 			component[key] = value
 		end
 	end
 
-    node.data._component = component
+    component[InternalKey] = {
+        node = node,
+        nodeTree = nodeTree
+    }
     
     component.props = Assign({}, self.defaultProps, props)
-    component.node = node
-    component.nodeTree = nodeTree
+    component.cascade = node.cascade
 
     component:init(props)
 
@@ -109,17 +115,17 @@ function Component:_mount(nodeTree, node)
 end
 
 function Component:_unmount(nodeTree, node)
-    local component = self.data._component
+    local component = node.data._component
 
     component:beforeUnmount()
 
-    for _, node in pairs(component.node.children) do
+    for _, node in pairs(node.children) do
         nodeTree:unmountNode({
             node = node
         })
     end
-    if component.node.data.eventManager then
-        component.node.data.eventManager:Destroy()
+    if node.data.eventManager then
+        node.data.eventManager:Destroy()
     end
 
     component:onUnmount()
@@ -131,16 +137,18 @@ function Component:update()
     if not self:shouldUpdate() then
         return
     end
-
+    
     self:beforeUpdate()
 
     local newElement = self:render(self.props)
     Assert(Type.GetType(newElement) == Types.Element, 'Component:render() must return a valid Element')
 
-    self.nodeTree:updateChildren({
-        node = self.node,
+    local Internal = self[InternalKey]
+
+    Internal.nodeTree:updateChildren({
+        node = Internal.node,
         children = newElement,
-        parent = self.node.data.parent
+        parent = Internal.node.data.parent
     })
 
     self:onUpdate()

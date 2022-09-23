@@ -2,6 +2,7 @@ local Package = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
+local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 local EventManager = require(Package.EventManager)
@@ -131,12 +132,16 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
 
     if propType == Types.Event or propType == Types.Change then
         PropertyUtil.appleEventProperty(node, prop, newValue)
+
     elseif prop == Types.Ref then
         PropertyUtil.appleRefProperty(node, newValue)
+
     elseif newValueType == Types.DynamicValue then
         PropertyUtil.applyDynamicValueProperty(node, prop, newValue)
+
     elseif PropertyUtil.IsNormalProperty(object.ClassName, prop) then
         PropertyUtil.applyNormalProperty(object, prop, newValue)
+
     else
 
     end

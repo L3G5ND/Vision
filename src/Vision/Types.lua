@@ -10,6 +10,7 @@ local Types = {
     Event = TypeMarker.Mark('Event'),
     Change = TypeMarker.Mark('Change'),
     Ref = TypeMarker.Mark('Ref'),
+    Cascader = TypeMarker.Mark('Cascader'),
     
     None = TypeMarker.Mark('None'),
 

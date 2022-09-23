@@ -19,6 +19,7 @@ local Vision = {
     Event = require(Props.Event),
     Change = require(Props.Change),
     Ref = require(Props.Ref),
+    Cascade = require(Props.Cascade),
 
     Renderer = require(Package.Renderer),
 
