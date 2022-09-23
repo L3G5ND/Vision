@@ -12,7 +12,7 @@ local UIRenderer = require(Package.UIRenderer)
 local Renderer = {}
 Renderer.RootKey = 'root'
 
-function Renderer.mount(element, parent)
+function Renderer.mount(element, parent, name)
 
     Assert(Type.GetType(element) == Types.Element, 'Invalid argument #1 (Must be a valid Element)')
     Assert(parent, 'Invalid argument #2 (Must be a Roblox Instance, got nil)')
@@ -28,7 +28,7 @@ function Renderer.mount(element, parent)
     tree.root = tree:mountNode({
         element = element, 
         parent = parent,
-        key =  Renderer.RootKey
+        key = name or Renderer.RootKey
     })
 
     Assert(tree:getRootNode().data.parent == parent, 'Parent property cannot be assigned to Host Nodes')
