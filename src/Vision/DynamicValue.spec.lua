@@ -74,7 +74,7 @@ return function()
 
 			expect(function()
 				dynamicValue:onChanged()
-			end).never.to.throw()
+			end).to.throw()
 		end)
 
 		it("should not fire changed function", function()

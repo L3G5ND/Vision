@@ -11,6 +11,10 @@
           "$path": "Packages"
         }
       },
+
+      "ServerScriptService": {
+        "$ignoreUnknownInstances": false
+      },
   
       "StarterPlayer": {
         "StarterPlayerScripts": {

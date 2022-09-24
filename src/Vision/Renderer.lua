@@ -17,7 +17,7 @@ Renderer.RootKey = "root"
 
 function Renderer.mount(element, parent, name)
 	Assert(Type.GetType(element) == Types.Element, "Invalid argument #1 (Must be a valid Element)")
-	Assert(parent, "Invalid argument #2 (Must be a Roblox Instance, got nil)")
+	Assert(parent, "Invalid argument #2 (Must be a Roblox Instance)")
 	Assert(typeof(parent) == "Instance", "Invalid argument #2 (Must be a Roblox Instance)")
 
 	local tree = setmetatable({

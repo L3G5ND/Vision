@@ -23,6 +23,8 @@ local Vision = {
 
 	Renderer = require(Package.Renderer),
 
+	oneChild = require(Package.OneChild),
+
 	Types = require(Package.Types),
 }
 

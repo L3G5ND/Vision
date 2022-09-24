@@ -79,32 +79,11 @@ local store = Rodux.Store.new(
 )
 
 local tree = Vision.mount(
-    element('Frame', {
-        [Vision.Cascade] = {
-            store = store
-        }
-    }, {
-        element('Frame', {}, {
-            element('Frame', {}, {
-                element(CounterApp)
-            })
-        })    
-    }), 
+	element(CounterApp, {
+		[Vision.Cascade] = {
+			store = store
+		}
+	}),
     plrGui,
     'CounterApp'
 )
-
-task.wait(10)
-
-tree:updateNode({
-    node = tree.root.children[1],
-    newElement = element('Frame', {}, {
-        element('Frame', {}, {
-            element(CounterApp)
-        })
-    })   
-})
-
-task.wait(10)
-
-tree:unmount()

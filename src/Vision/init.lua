@@ -50,6 +50,9 @@ VisionAPI.renderer = Vision.Renderer
 VisionAPI.Mount = Vision.Renderer.mount
 VisionAPI.mount = Vision.Renderer.mount
 
+VisionAPI.OneChild = Vision.oneChild
+VisionAPI.oneChild = Vision.oneChild
+
 VisionAPI.Types = Vision.Types
 VisionAPI.types = Vision.Types
 

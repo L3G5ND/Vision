@@ -16,6 +16,12 @@
         "Tests": {
             "$path": "Tests"
         }
+      },
+
+      "StarterPlayer": {
+        "StarterPlayerScripts": {
+          "$ignoreUnknownInstances": false
+        }
       }
     }
   }

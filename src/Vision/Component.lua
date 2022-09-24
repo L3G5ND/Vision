@@ -76,6 +76,7 @@ function Component:_mount(nodeTree, node)
 	}
 
 	component.props = Assign({}, self.defaultProps, props)
+	component.children = Assign(element.children)
 	component.cascade = node.cascade
 
 	component:init(props)
