@@ -84,14 +84,16 @@ function Renderer:mountNode(data)
 	}
 	Type.SetType(node, Types.Node)
 
-	local cascadeProp = element.props[CascadeProp]
-	if cascadeProp then
-		Assert(
-			typeof(cascadeProp) == "table",
-			"Invalid property [" .. tostring(Types.Cascader) .. "] (type 'table' expected)"
-		)
-		for key, value in pairs(cascadeProp) do
-			node.cascade[key] = value
+	if element.props then
+		local cascadeProp = element.props[CascadeProp]
+		if cascadeProp then
+			Assert(
+				typeof(cascadeProp) == "table",
+				"Invalid property [" .. tostring(Types.Cascader) .. "] (type 'table' expected)"
+			)
+			for key, value in pairs(cascadeProp) do
+				node.cascade[key] = value
+			end
 		end
 	end
 
@@ -172,14 +174,16 @@ function Renderer:updateNode(data)
 			cascade = cascade,
 		})
 	else
-		local cascadeProp = newElement.props[CascadeProp]
-		if cascadeProp then
-			Assert(
-				typeof(cascadeProp) == "table",
-				"Invalid property [" .. tostring(Types.Cascader) .. "] (type 'table' expected)"
-			)
-			for key, value in pairs(cascadeProp) do
-				node.cascade[key] = value
+		if newElement.props then
+			local cascadeProp = newElement.props[CascadeProp]
+			if cascadeProp then
+				Assert(
+					typeof(cascadeProp) == "table",
+					"Invalid property [" .. tostring(Types.Cascader) .. "] (type 'table' expected)"
+				)
+				for key, value in pairs(cascadeProp) do
+					node.cascade[key] = value
+				end
 			end
 		end
 
