@@ -9,29 +9,31 @@ local Types = require(Package.Types)
 
 local ElementKind = require(Element.ElementKind)
 
-return function (component, props, children)
+return function(component, props, children)
+	if not props then
+		props = {}
+	end
+	if not children then
+		children = {}
+	end
 
-    if not props then props = {} end
-    if not children then children = {} end
+	Assert(typeof(component) == "Instance", "Invalid argument #1 (Must be a valid Roblox Instance)")
+	Assert(typeof(props) == "table", "Invalid argument #2 (Must be of type 'table')")
+	Assert(typeof(children) == "table", "Invalid argument #3 (Must be of type 'table')")
 
-    Assert(typeof(component) == 'Instance', 'Invalid argument #1 (Must be a valid Roblox Instance)')
-    Assert(typeof(props) == 'table', 'Invalid argument #2 (Must be of type \'table\')')
-    Assert(typeof(children) == 'table', 'Invalid argument #3 (Must be of type \'table\')')
+	local kind = ElementKind.WrappedSingle
 
-    local kind = ElementKind.WrappedSingle
+	local element = setmetatable({
 
-    local element = setmetatable({
+		component = component,
+		kind = kind,
 
-        component = component,
-        kind = kind,
+		props = props,
+		children = children,
+	}, {
+		__newindex = function() end,
+	})
+	Type.SetType(element, Types.Element)
 
-        props = props, 
-        children = children,
-
-    }, {
-        __newindex = function() end
-    })
-    Type.SetType(element, Types.Element)
-
-    return element
+	return element
 end

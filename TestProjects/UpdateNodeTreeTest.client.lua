@@ -1,5 +1,8 @@
 local RS = game:GetService('ReplicatedStorage')
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local Vision = require(RS.Vision)
 
 local function createListItem(props)
@@ -57,7 +60,7 @@ end
 local maxNum = 7
 local times = 10
 
-local tree = Vision.mount(Vision.createElement(createList, {num = maxNum}, {}), script.Parent)
+local tree = Vision.mount(Vision.createElement(createList, {num = maxNum}, {}), plrGui)
 
 task.wait(8)
 

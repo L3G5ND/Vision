@@ -5,6 +5,9 @@ local Rodux = require(RS.Packages.Rodux)
 
 local element = Vision.createElement
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local CounterApp = Vision.Component.new('CounterApp')
 
 function CounterApp:init()
@@ -87,7 +90,7 @@ local tree = Vision.mount(
             })
         })    
     }), 
-    script.Parent,
+    plrGui,
     'CounterApp'
 )
 

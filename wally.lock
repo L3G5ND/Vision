@@ -3,11 +3,16 @@
 registry = "test"
 
 [[package]]
-name = "malac/vision"
+name = "l3g5nd/vision"
 version = "0.1.0"
-dependencies = [["Rodux", "roblox/rodux@3.0.0"]]
+dependencies = [["Rodux", "roblox/rodux@3.0.0"], ["TestEZ", "roblox/testez@0.4.1"]]
 
 [[package]]
 name = "roblox/rodux"
 version = "3.0.0"
+dependencies = []
+
+[[package]]
+name = "roblox/testez"
+version = "0.4.1"
 dependencies = []

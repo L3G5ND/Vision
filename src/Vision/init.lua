@@ -7,7 +7,6 @@ local Vision = require(Package.Vision)
 
 local VisionAPI = {}
 
-
 VisionAPI.createElement = Vision.createElement
 VisionAPI.element = Vision.createElement
 
@@ -20,17 +19,14 @@ VisionAPI.wrap = Vision.wrapComponent
 VisionAPI.wrapSingleComponent = Vision.wrapSingleComponent
 VisionAPI.wrapSingle = Vision.wrapSingleComponent
 
-
 VisionAPI.Component = Vision.Component
 VisionAPI.component = Vision.Component
-
 
 VisionAPI.CreateRef = Vision.createRef
 VisionAPI.createRef = Vision.createRef
 
 VisionAPI.DynamicValue = Vision.dynamicValue
 VisionAPI.dynamicValue = Vision.dynamicValue
-
 
 VisionAPI.Event = Vision.Event
 VisionAPI.event = Vision.Event
@@ -48,21 +44,18 @@ VisionAPI.ref = Vision.Ref
 VisionAPI.Cascade = Vision.Cascade
 VisionAPI.cascade = Vision.Cascade
 
-
 VisionAPI.Renderer = Vision.Renderer
 VisionAPI.renderer = Vision.Renderer
 
 VisionAPI.Mount = Vision.Renderer.mount
 VisionAPI.mount = Vision.Renderer.mount
 
-
 VisionAPI.Types = Vision.Types
 VisionAPI.types = Vision.Types
 
-
 setmetatable(VisionAPI, {
-    __call = function(tbl, ...)
-        return Vision.createElement(...)
-    end,
+	__call = function(tbl, ...)
+		return Vision.createElement(...)
+	end,
 })
-return StrictTable(VisionAPI, 'Vision')
+return StrictTable(VisionAPI, "Vision")

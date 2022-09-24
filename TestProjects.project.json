@@ -1,0 +1,23 @@
+{
+    "name": "Vision Test Projects",
+    "tree": {
+      "$className": "DataModel",
+  
+      "ReplicatedStorage": {
+        "Vision": {
+          "$path": "src/Vision"
+        },
+        "Packages": {
+          "$path": "Packages"
+        }
+      },
+  
+      "StarterPlayer": {
+        "StarterPlayerScripts": {
+          "TestProjects": {
+            "$path": "TestProjects"
+          }
+        }
+      }
+    }
+  }

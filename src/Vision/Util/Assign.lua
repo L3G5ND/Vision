@@ -7,7 +7,7 @@ local Types = require(Package.Types)
 
 return function(tbl, ...)
 	tbl = Copy(tbl)
-	
+
 	for index = 1, select("#", ...) do
 		local source = select(index, ...)
 

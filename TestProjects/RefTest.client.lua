@@ -3,6 +3,9 @@ local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local RefTest = Vision.Component.new('Test')
 
 function RefTest:init(props)
@@ -68,5 +71,5 @@ local element2 = Vision.createElement(RefTest, {
     RainbowTime = 3
 }, {})
 
-Vision.mount(element1, script.Parent)
-Vision.mount(element2, script.Parent)
+Vision.mount(element1, plrGui)
+Vision.mount(element2, plrGui)

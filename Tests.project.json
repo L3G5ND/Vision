@@ -13,17 +13,9 @@
       },
   
       "ServerScriptService": {
-  
-      },
-  
-      "StarterPlayer": {
-        "StarterPlayerScripts": {
-          
+        "Tests": {
+            "$path": "Tests"
         }
-      },
-  
-      "StarterGui": {
-        "$path": "tests"
       }
     }
   }

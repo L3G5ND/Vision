@@ -1,5 +1,8 @@
 local RS = game:GetService('ReplicatedStorage')
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local Vision = require(RS.Vision)
 
 local UI = Instance.new('ScreenGui')
@@ -33,6 +36,4 @@ local wrappedElement = Vision.wrap(UI, {}, {
     })
 })
 
-local tree = Vision.mount(wrappedElement, script.Parent)
-
-print(tree)
+local tree = Vision.mount(wrappedElement, plrGui)

@@ -3,5 +3,5 @@ local Package = script.Parent
 local DynamicValue = require(Package.DynamicValue)
 
 return function()
-    return DynamicValue.new()
+	return DynamicValue.new()
 end

@@ -6,25 +6,24 @@ local Element = require(Package.Element)
 
 local Vision = {
 
-    createElement = Element.createElement,
-    createElementGroup = Element.createElementGroup,
-    wrapComponent = Element.wrapComponent,
-    wrapSingleComponent = Element.wrapSingleComponent,
+	createElement = Element.createElement,
+	createElementGroup = Element.createElementGroup,
+	wrapComponent = Element.wrapComponent,
+	wrapSingleComponent = Element.wrapSingleComponent,
 
-    Component = require(Package.Component),
-    
-    createRef = require(Package.CreateRef),
-    dynamicValue = require(Package.DynamicValue),
+	Component = require(Package.Component),
 
-    Event = require(Props.Event),
-    Change = require(Props.Change),
-    Ref = require(Props.Ref),
-    Cascade = require(Props.Cascade),
+	createRef = require(Package.CreateRef),
+	dynamicValue = require(Package.DynamicValue),
 
-    Renderer = require(Package.Renderer),
+	Event = require(Props.Event),
+	Change = require(Props.Change),
+	Ref = require(Props.Ref),
+	Cascade = require(Props.Cascade),
 
-    Types = require(Package.Types),
-    
+	Renderer = require(Package.Renderer),
+
+	Types = require(Package.Types),
 }
 
 return Vision

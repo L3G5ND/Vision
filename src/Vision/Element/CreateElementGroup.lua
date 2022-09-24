@@ -10,16 +10,15 @@ local Types = require(Package.Types)
 local ElementKind = require(Element.ElementKind)
 
 return function(elements)
+	Assert(typeof(elements) == "table", "Invalid argument #1 (Must be of type 'table')")
 
-    Assert(typeof(elements) == 'table', 'Invalid argument #1 (Must be of type \'table\')')
+	local elementGroup = setmetatable({
+		elements = elements,
+		kind = ElementKind.Group,
+	}, {
+		__newindex = function() end,
+	})
+	Type.SetType(elementGroup, Types.Element)
 
-    local elementGroup = setmetatable({
-        elements = elements,
-        kind = ElementKind.Group,
-    }, {
-        __newindex = function() end
-    })
-    Type.SetType(elementGroup, Types.Element)
-
-    return elementGroup
+	return elementGroup
 end

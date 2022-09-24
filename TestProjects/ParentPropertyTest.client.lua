@@ -2,6 +2,9 @@ local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local partRef = Vision.createRef()
 
 local element = Vision.createElement("Part", {
@@ -10,7 +13,7 @@ local element = Vision.createElement("Part", {
     [Vision.Ref] = partRef
 }, {
     SurfaceGui = Vision.createElement("SurfaceGui", {
-        Parent = script.Parent,
+        Parent = plrGui,
         Adornee = partRef
     }, {
         TextLabel = Vision.createElement("TextLabel", {

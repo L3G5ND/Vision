@@ -2,6 +2,9 @@ local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local Test = Vision.Component.new('Test')
 
 function Test:init(props)
@@ -56,5 +59,5 @@ local element2 = Vision.createElement(Test, {
     Position = UDim2.new(.75, 0, .5, 0),
 }, {})
 
-Vision.mount(element1, script.Parent)
-Vision.mount(element2, script.Parent)
+Vision.mount(element1, plrGui)
+Vision.mount(element2, plrGui)

@@ -2,6 +2,9 @@ local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
 
+local plr = game:GetService('Players').LocalPlayer
+local plrGui = plr.PlayerGui
+
 local dynamicValue = Vision.dynamicValue.new('Hello!')
 
 local newElement = Vision.createElement('ScreenGui', {}, {
@@ -68,4 +71,4 @@ local newElement = Vision.createElement('ScreenGui', {}, {
     })
 })
 
-Vision.mount(newElement, script.Parent)
+Vision.mount(newElement, plrGui)

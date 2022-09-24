@@ -11,43 +11,45 @@ local Types = require(Package.Types)
 local ElementKind = require(Element.ElementKind)
 
 local function wrapComponent(component, props, children)
+	if not props then
+		props = {}
+	end
+	if not children then
+		children = {}
+	end
 
-    if not props then props = {} end
-    if not children then children = {} end
+	Assert(typeof(component) == "Instance", "Invalid argument #1 (Must be a valid Roblox Instance)")
+	Assert(typeof(props) == "table", "Invalid argument #2 (Must be of type 'table')")
+	Assert(typeof(children) == "table", "Invalid argument #3 (Must be of type 'table')")
 
-    Assert(typeof(component) == 'Instance', 'Invalid argument #1 (Must be a valid Roblox Instance)')
-    Assert(typeof(props) == 'table', 'Invalid argument #2 (Must be of type \'table\')')
-    Assert(typeof(children) == 'table', 'Invalid argument #3 (Must be of type \'table\')')
+	local kind = ElementKind.Wrapped
 
-    local kind = ElementKind.Wrapped
+	local componentChildren = {}
+	for _, child in pairs(component:GetChildren()) do
+		componentChildren[child.name] = wrapComponent(child, {}, {})
+	end
+	for _, child in pairs(children) do
+		local hasOverwrite = false
+		for key, childComponent in pairs(componentChildren) do
+			if childComponent.component.Name == child.component.Name then
+				componentChildren[key] = child
+			end
+		end
+	end
 
-    local componentChildren = {}
-    for _, child in pairs(component:GetChildren()) do
-        componentChildren[child.name] = wrapComponent(child, {}, {})
-    end
-    for _, child in pairs(children) do
-        local hasOverwrite = false
-        for key, childComponent in pairs(componentChildren) do
-            if childComponent.component.Name == child.component.Name then
-                componentChildren[key] = child
-            end
-        end
-    end
+	local element = setmetatable({
 
-    local element = setmetatable({
+		component = component,
+		kind = kind,
 
-        component = component,
-        kind = kind,
+		props = props,
+		children = children,
+	}, {
+		__newindex = function() end,
+	})
+	Type.SetType(element, Types.Element)
 
-        props = props, 
-        children = children,
-
-    }, {
-        __newindex = function() end
-    })
-    Type.SetType(element, Types.Element)
-
-    return element
+	return element
 end
 
 return wrapComponent
