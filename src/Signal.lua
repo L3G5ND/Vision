@@ -43,7 +43,9 @@ function signal:AsyncFire(...)
 end
 
 function signal:Disconnect()
-	self._connections = nil
+	for key, _ in pairs(self._connections) do
+		self._connections[key] = nil
+	end
 end
 
 return signal
