@@ -1,7 +1,7 @@
 local RS = game:GetService('ReplicatedStorage')
 
 local Vision = require(RS.Vision)
-local Rodux = require(RS.Packages.Rodux)
+local Rodux = require(RS.DevPackages.Rodux)
 
 local element = Vision.createElement
 

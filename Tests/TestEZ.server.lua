@@ -1,6 +1,6 @@
 local RS = game:GetService("ReplicatedStorage")
 
-local TestEZ = require(RS.Packages.TestEZ)
+local TestEZ = require(RS.DevPackages.TestEZ)
 
 local results = TestEZ.TestBootstrap:run(
 	{RS.Vision}
