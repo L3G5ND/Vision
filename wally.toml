@@ -7,6 +7,6 @@ authors = ["L3G5ND"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
-[dev-dependencies]
+[server-dependencies]
 Rodux = "roblox/rodux@3.0.0"
 TestEZ = "roblox/testez@0.4.1"
