@@ -4,7 +4,7 @@
 </div>
 
 # About
-This is the first release of Vision. Currently there is no documentation. This project was designed for personal use, though was made public for anyone to use.
+An easy to use UI library for Roblox Lua. Currently there is no documentation. This project was designed for personal use, though was made public for anyone to use.
 
 # Motivation
 I made this project to compensate with Roact. 
