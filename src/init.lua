@@ -56,6 +56,9 @@ VisionAPI.oneChild = Vision.oneChild
 VisionAPI.Types = Vision.Types
 VisionAPI.types = Vision.Types
 
+VisionAPI.Enviroments = Vision.Enviroments
+VisionAPI.enviroments = Vision.Enviroments
+
 setmetatable(VisionAPI, {
 	__call = function(tbl, ...)
 		return Vision.createElement(...)

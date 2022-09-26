@@ -5,20 +5,20 @@ local TypeMarker = require(Util.TypeMarker)
 
 local Types = {
 
-	DynamicValue = TypeMarker.Mark('DynamicValue'),
+	DynamicValue = TypeMarker.Mark("DynamicValue"),
 
-	Event = TypeMarker.Mark('Event'),
-	Change = TypeMarker.Mark('Change'),
-	Ref = TypeMarker.Mark('Ref'),
-	Cascader = TypeMarker.Mark('Cascader'),
+	Event = TypeMarker.Mark("Event"),
+	Change = TypeMarker.Mark("Change"),
+	Ref = TypeMarker.Mark("Ref"),
+	Cascader = TypeMarker.Mark("Cascader"),
 
-	None = TypeMarker.Mark('None'),
+	None = TypeMarker.Mark("None"),
 
-	Element = TypeMarker.Mark('Element'),
+	Element = TypeMarker.Mark("Element"),
 
-	Renderer = TypeMarker.Mark('Renderer'),
-	Node = TypeMarker.Mark('Node'),
-	ParentKey = TypeMarker.Mark('ParentKey'),
+	Renderer = TypeMarker.Mark("Renderer"),
+	Node = TypeMarker.Mark("Node"),
+	ParentKey = TypeMarker.Mark("ParentKey"),
 }
 
 return Types

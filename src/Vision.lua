@@ -26,6 +26,8 @@ local Vision = {
 	oneChild = require(Package.OneChild),
 
 	Types = require(Package.Types),
+
+	Enviroments = require(Package.Enviroments).get(),
 }
 
 return Vision

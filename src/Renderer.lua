@@ -11,6 +11,7 @@ local Assert = require(Util.Assert)
 local Element = require(Package.Element)
 local Types = require(Package.Types)
 local UIRenderer = require(Package.UIRenderer)
+local Enviroments = require(Package.Enviroments)
 
 local Renderer = {}
 Renderer.RootKey = "root"
@@ -22,6 +23,8 @@ function Renderer.mount(element, parent, name)
 
 	local tree = setmetatable({
 		root = nil,
+		script = getfenv(2).script,
+		mounted = false
 	}, {
 		__index = Renderer,
 	})
@@ -35,13 +38,20 @@ function Renderer.mount(element, parent, name)
 
 	Assert(tree:getRootNode().data.parent == parent, "Parent property cannot be assigned to Host Nodes")
 
+	tree.mounted = true
+	Enviroments.add(tree.script, tree)
+
 	return tree
 end
 
 function Renderer:unmount()
+	Enviroments.remove(self.script, self)
+
 	self:unmountNode({
 		node = self.root,
 	})
+
+	self.mounted = false
 end
 
 function Renderer:update(newElement)
