@@ -75,15 +75,15 @@ function Component:_mount(nodeTree, node)
 		nodeTree = nodeTree,
 	}
 
-	component.props = Assign({}, self.defaultProps, props)
+	component.props = Assign({}, self.defaultProps, node.cascade, props)
 	component.children = Assign(element.children)
 	component.cascade = node.cascade
 
-	component:init(props)
+	component:init(component.props, component.children)
 
 	component:beforeMount()
 
-	local newElement = component:render(props)
+	local newElement = component:render(component.props, component.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
 
 	nodeTree:updateChildren({
@@ -95,10 +95,33 @@ function Component:_mount(nodeTree, node)
 	component:onMount()
 end
 
-function Component:_unmount(nodeTree, node)
-	local component = node.data._component
+function Component:update()
+	if not self:shouldUpdate() then
+		return
+	end
 
-	component:beforeUnmount()
+	self:beforeUpdate()
+
+	local newElement = self:render(self.props, self.children)
+	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
+
+	local Internal = self[InternalKey]
+
+	Internal.nodeTree:updateChildren({
+		node = Internal.node,
+		children = newElement,
+		parent = Internal.node.data.parent,
+	})
+
+	self:onUpdate()
+end
+
+function Component:_unmount()
+	local Internal = self[InternalKey]
+	local node = Internal.node
+	local nodeTree = Internal.nodeTree
+
+	self:beforeUnmount()
 
 	for _, node in pairs(node.children) do
 		nodeTree:unmountNode({
@@ -109,17 +132,16 @@ function Component:_unmount(nodeTree, node)
 		node.data.eventManager:Destroy()
 	end
 
-	component:onUnmount()
+	self:onUnmount()
 end
 
-function Component:update()
-	if not self:shouldUpdate() then
-		return
-	end
+function Component:_update(newElement)
+	self.props = Assign({}, self.defaultProps, self.cascade, self.props)
+	self.children = Assign(newElement.children)
 
 	self:beforeUpdate()
 
-	local newElement = self:render(self.props)
+	local newElement = self:render(self.props, self.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
 
 	local Internal = self[InternalKey]

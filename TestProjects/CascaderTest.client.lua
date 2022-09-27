@@ -10,8 +10,8 @@ local plrGui = plr.PlayerGui
 
 local CounterApp = Vision.Component.new("CounterApp")
 
-function CounterApp:init()
-	self.store = self.cascade.store
+function CounterApp:init(props, children)
+	self.store = props.store -- or self.cascade.store 
 	self.increment = function()
 		self.store:dispatch({
 			type = "increment",
@@ -26,7 +26,7 @@ function CounterApp:init()
 	end
 end
 
-function CounterApp:render()
+function CounterApp:render(props, children)
 	return element("ScreenGui", {
 		IgnoreGuiInset = true,
 	}, {
@@ -74,8 +74,12 @@ end, {
 	value = 0,
 })
 
+function CounterAppCreator(props, children)
+	return element(CounterApp, props, children)
+end
+
 local tree = Vision.mount(
-	element(CounterApp, {
+	element(CounterAppCreator, {
 		[Vision.Cascade] = {
 			store = store,
 		},

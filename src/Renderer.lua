@@ -7,6 +7,7 @@ local Util = Package.Util
 local Type = require(Util.Type)
 local DeepEqual = require(Util.DeepEqual)
 local Assert = require(Util.Assert)
+local Assign = require(Util.Assign)
 
 local Element = require(Package.Element)
 local Types = require(Package.Types)
@@ -118,7 +119,8 @@ function Renderer:mountNode(data)
 			parent = parent,
 		})
 	elseif kind == Element.kind.Function then
-		local newElement = element.component(element.props)
+		local props = Assign(node.cascade, element.props)
+		local newElement = element.component(props, element.children)
 		Assert(Type.GetType(newElement) == Types.Element, "Element Function must return a valid Element")
 
 		self:updateChildren({
@@ -157,7 +159,7 @@ function Renderer:unmountNode(data)
 		end
 		node.data.object:Destroy()
 	else
-		element.component:_unmount(self, node)
+		node.data._component:_unmount(self, node)
 	end
 end
 
@@ -208,16 +210,17 @@ function Renderer:updateNode(data)
 				parent = parent,
 			})
 		elseif kind == Element.kind.Function then
-			local newElement = newElement.component(newElement.props)
+			local props = Assign(node.cascade, newElement.props)
+			local newElement = newElement.component(props, newElement.children)
 			Assert(Type.GetType(newElement) == Types.Element, "Element function must return a valid Element")
-
+				
 			self:updateChildren({
 				node = node,
 				children = newElement,
 				parent = parent,
 			})
 		elseif kind == Element.kind.Component then
-			element.component.update(node.data._component)
+			node.data._component:_update(newElement)
 		elseif kind == Element.kind.Wrapped then
 			node = UIRenderer.Update(self, node, newElement)
 		elseif kind == Element.kind.WrappedSingle then
