@@ -1,6 +1,6 @@
 local function copy(tbl, cache)
 	if not cache then
-		cache = {tbl = true}
+		cache = { tbl = true }
 	end
 
 	local newTable = {}

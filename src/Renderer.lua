@@ -214,7 +214,7 @@ function Renderer:updateNode(data)
 			local props = Assign(node.cascade, newElement.props)
 			local newElement = newElement.component(props, newElement.children)
 			Assert(Type.GetType(newElement) == Types.Element, "Element function must return a valid Element")
-				
+
 			self:updateChildren({
 				node = node,
 				children = newElement,

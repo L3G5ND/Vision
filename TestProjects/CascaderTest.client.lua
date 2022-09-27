@@ -11,7 +11,7 @@ local plrGui = plr.PlayerGui
 local CounterApp = Vision.Component.new("CounterApp")
 
 function CounterApp:init(props, children)
-	self.store = props.store -- or self.cascade.store 
+	self.store = props.store -- or self.cascade.store
 	self.increment = function()
 		self.store:dispatch({
 			type = "increment",
