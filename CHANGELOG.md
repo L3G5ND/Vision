@@ -1,3 +1,6 @@
+# 2.1.0
+* [Vision.Ref] now accepts functions. The reference is passed as the first argument of the function.
+
 # 2.0.0
 * Cascade values are now merged with props in functions and components.
 * Component:update() is now Component:rerender().
