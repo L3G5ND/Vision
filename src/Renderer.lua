@@ -10,6 +10,7 @@ local Assert = require(Util.Assert)
 local Assign = require(Util.Assign)
 
 local Element = require(Package.Element)
+local Component = require(Package.Component)
 local Types = require(Package.Types)
 local UIRenderer = require(Package.UIRenderer)
 local Enviroments = require(Package.Enviroments)
@@ -129,7 +130,7 @@ function Renderer:mountNode(data)
 			parent = node.data.parent,
 		})
 	elseif kind == Element.kind.Component then
-		element.component:_mount(self, node)
+		Component._mount(element.component, self, node)
 	elseif kind == Element.kind.Wrapped then
 		UIRenderer.Render(self, node)
 	elseif kind == Element.kind.WrappedSingle then
@@ -159,7 +160,7 @@ function Renderer:unmountNode(data)
 		end
 		node.data.object:Destroy()
 	else
-		node.data._component:_unmount(self, node)
+		Component._unmount(node.data._component)
 	end
 end
 
@@ -220,7 +221,7 @@ function Renderer:updateNode(data)
 				parent = parent,
 			})
 		elseif kind == Element.kind.Component then
-			node.data._component:_update(newElement)
+			Component._update(node.data._component, newElement)
 		elseif kind == Element.kind.Wrapped then
 			node = UIRenderer.Update(self, node, newElement)
 		elseif kind == Element.kind.WrappedSingle then
