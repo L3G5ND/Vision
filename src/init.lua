@@ -64,4 +64,4 @@ setmetatable(VisionAPI, {
 		return Vision.createElement(...)
 	end,
 })
-return StrictTable(VisionAPI, "Vision")
+return StrictTable(VisionAPI, "Vision") 

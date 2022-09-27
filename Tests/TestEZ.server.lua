@@ -12,4 +12,4 @@ if ranSuccessfully then
     print('[TestEZ] - .spec files ran successfully')
 else
     print('[TestEZ] - .spec files ran unsucessfully')
-end
+end 

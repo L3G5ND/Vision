@@ -8,7 +8,7 @@ local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 local Element = require(Package.Element)
-
+ 
 local InternalKey = TypeMarker.Mark("ComponentInternalKey")
 
 local Component = {}

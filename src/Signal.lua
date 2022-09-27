@@ -44,7 +44,7 @@ end
 
 function signal:Disconnect()
 	for key, _ in pairs(self._connections) do
-		self._connections[key] = nil
+		self._connections[key] = nil 
 	end
 end
 

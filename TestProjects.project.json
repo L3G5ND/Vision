@@ -1,28 +1,28 @@
 {
-    "name": "Vision Test Projects",
-    "tree": {
-      "$className": "DataModel",
-  
-      "ReplicatedStorage": {
-        "$ignoreUnknownInstances": false,
-        "Vision": {
-          "$path": "src"
-        },
-        "Packages": {
-          "$path": "Packages"
-        }
-      },
+  "name": "Vision Test Projects",
+  "tree": {
+    "$className": "DataModel",
 
-      "ServerScriptService": {
-        "$ignoreUnknownInstances": false
+    "ReplicatedStorage": {
+      "$ignoreUnknownInstances": false,
+      "Vision": {
+        "$path": "src"
       },
-  
-      "StarterPlayer": {
-        "StarterPlayerScripts": {
-          "TestProjects": {
-            "$path": "TestProjects"
-          }
+      "Packages": {
+        "$path": "Packages"
+      }
+    },
+
+    "ServerScriptService": {
+      "$ignoreUnknownInstances": false
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "TestProjects": {
+          "$path": "TestProjects"
         }
       }
     }
   }
+}

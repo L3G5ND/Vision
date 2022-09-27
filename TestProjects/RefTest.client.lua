@@ -72,4 +72,4 @@ local element2 = Vision.createElement(RefTest, {
 }, {})
 
 Vision.mount(element1, plrGui)
-Vision.mount(element2, plrGui)
+Vision.mount(element2, plrGui) 

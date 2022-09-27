@@ -17,7 +17,7 @@ PropertyUtil.GetDefualtProperty = function(type, prop)
 		if propCache == Types.None then
 			return nil
 		end
-		if propCache then
+		if propCache then 
 			return propCache
 		end
 	else

@@ -69,4 +69,4 @@ for i = 0, maxNum*times-1 do
     wait(.1)
 end
 
-print(tree)
+print(tree) 

@@ -11,7 +11,7 @@ local function equal(v1, v2)
 	if typeof(v1) == "table" and typeof(v2) == "table" then
 		if #v1 ~= #v2 then
 			return false
-		end
+		end 
 		return true, true
 	end
 	return false

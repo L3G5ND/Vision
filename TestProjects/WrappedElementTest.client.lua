@@ -36,4 +36,4 @@ local wrappedElement = Vision.wrap(UI, {}, {
     })
 })
 
-local tree = Vision.mount(wrappedElement, plrGui)
+local tree = Vision.mount(wrappedElement, plrGui) 

@@ -10,6 +10,6 @@ local function copy(tbl)
 	end
 	setmetatable(newTable, mt)
 	return newTable
-end
+end 
 
 return copy
