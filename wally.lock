@@ -4,8 +4,8 @@ registry = "test"
 
 [[package]]
 name = "l3g5nd/vision"
-version = "1.0.0"
-dependencies = []
+version = "1.1.1"
+dependencies = [["Rodux", "roblox/rodux@3.0.0"], ["TestEZ", "roblox/testez@0.4.1"]]
 
 [[package]]
 name = "roblox/rodux"

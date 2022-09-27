@@ -8,8 +8,8 @@
         "Vision": {
           "$path": "src"
         },
-        "DevPackages": {
-          "$path": "DevPackages"
+        "Packages": {
+          "$path": "Packages"
         }
       },
 

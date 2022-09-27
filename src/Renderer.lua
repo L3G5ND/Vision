@@ -24,7 +24,7 @@ function Renderer.mount(element, parent, name)
 	local tree = setmetatable({
 		root = nil,
 		script = getfenv(2).script,
-		mounted = false
+		mounted = false,
 	}, {
 		__index = Renderer,
 	})
