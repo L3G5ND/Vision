@@ -29,9 +29,13 @@ function Component:beforeUnmount() end
 
 function Component:onUnmount() end
 
-function Component:shouldUpdate()
+function Component:shouldRerender()
 	return true
 end
+
+function Component:beforeRerender() end
+
+function Component:onRerender() end
 
 function Component:beforeUpdate() end
 
@@ -65,7 +69,7 @@ function Component:_mount(nodeTree, node)
 	node.data._component = component
 
 	for key, value in pairs(self) do
-		if key ~= "new" and key ~= "_mount" and key ~= "_unmount" then
+		if key ~= "_mount" and key ~= "_unmount" and key ~= "_update" then
 			component[key] = value
 		end
 	end
@@ -95,12 +99,12 @@ function Component:_mount(nodeTree, node)
 	component:onMount()
 end
 
-function Component:update()
-	if not self:shouldUpdate() then
+function Component:rerender()
+	if not self:shouldRerender() then
 		return
 	end
 
-	self:beforeUpdate()
+	self:beforeRerender()
 
 	local newElement = self:render(self.props, self.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
@@ -113,7 +117,7 @@ function Component:update()
 		parent = Internal.node.data.parent,
 	})
 
-	self:onUpdate()
+	self:onRerender()
 end
 
 function Component:_unmount()
@@ -136,10 +140,13 @@ function Component:_unmount()
 end
 
 function Component:_update(newElement)
-	self.props = Assign({}, self.defaultProps, self.cascade, self.props)
-	self.children = Assign(newElement.children)
+	local newProps = Assign({}, self.defaultProps, self.cascade, self.props)
+	local children = Assign(newElement.children)
 
-	self:beforeUpdate()
+	self:beforeUpdate(newProps, children)
+
+	self.props = newProps
+	self.children = children
 
 	local newElement = self:render(self.props, self.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
@@ -152,7 +159,7 @@ function Component:_update(newElement)
 		parent = Internal.node.data.parent,
 	})
 
-	self:onUpdate()
+	self:onUpdate(self.props, self.children)
 end
 
 return Component

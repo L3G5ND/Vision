@@ -16,13 +16,13 @@ function CounterApp:init(props, children)
 		self.store:dispatch({
 			type = "increment",
 		})
-		self:update()
+		self:rerender()
 	end
 	self.decrement = function()
 		self.store:dispatch({
 			type = "decrement",
 		})
-		self:update()
+		self:rerender()
 	end
 end
 

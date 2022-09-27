@@ -45,7 +45,7 @@ function Test:render(props)
 					end
 
 					self.color = self.colors[self.indexToColors[self.colorIndex]]
-					self:update()
+					self:rerender()
 				end,
 			}),
 		}),
