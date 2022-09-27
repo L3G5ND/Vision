@@ -91,7 +91,7 @@ end
 PropertyUtil.appleRefProperty = function(node, ref)
 	if typeof(ref) == "function" then
 		ref(node.data.object)
-	elseif typeof(ref) == Types.DynamicValue then
+	elseif Type.GetType(ref) == Types.DynamicValue then
 		ref:set(node.data.object)
 	else
 		error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
