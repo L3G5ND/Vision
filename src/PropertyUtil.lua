@@ -2,7 +2,6 @@ local Package = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
-local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 local EventManager = require(Package.EventManager)
@@ -90,7 +89,13 @@ PropertyUtil.appleEventProperty = function(node, prop, value)
 end
 
 PropertyUtil.appleRefProperty = function(node, ref)
-	ref:set(node.data.object)
+	if typeof(ref) == "function" then
+		ref(node.data.object)
+	elseif typeof(ref) == Types.DynamicValue then
+		ref:set(node.data.object)
+	else
+		error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+	end
 end
 
 PropertyUtil.applyDynamicValueProperty = function(node, prop, value)
@@ -138,6 +143,7 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
 	elseif PropertyUtil.IsNormalProperty(object.ClassName, prop) then
 		PropertyUtil.applyNormalProperty(object, prop, newValue)
 	else
+		-- Ignore prop
 	end
 end
 
