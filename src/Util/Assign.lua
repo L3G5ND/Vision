@@ -18,7 +18,7 @@ return function(tbl, ...)
 				else
 					tbl[key] = value
 				end
-			end 
+			end
 		end
 	end
 

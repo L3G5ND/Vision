@@ -15,5 +15,5 @@ return {
 	end,
 	get = function()
 		return Enviroments
-	end, 
+	end,
 }

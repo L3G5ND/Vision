@@ -12,7 +12,7 @@ TypeMarker.Mark = function(typeMarker)
 
 	Internal[marker] = marker
 	return marker
-end 
+end
 
 TypeMarker.Is = function(typeMarker)
 	return Internal[typeMarker]

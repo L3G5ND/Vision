@@ -14,5 +14,5 @@ return function(children)
 
 	Assert(nextChild, "Invalid argument #1 (At most, one child element must be specified)")
 
-	return child 
+	return child
 end

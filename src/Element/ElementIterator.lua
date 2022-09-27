@@ -21,4 +21,3 @@ return function(element)
 
 	return pairs(element)
 end
- 

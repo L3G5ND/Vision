@@ -18,7 +18,7 @@ EventManager.types = {
 	Change = function(object, key)
 		return object:GetPropertyChangedSignal(key)
 	end,
-} 
+}
 
 function EventManager.new(object)
 	return setmetatable({

@@ -14,7 +14,7 @@ return function(_type)
 			}, {
 				__tostring = function(tbl)
 					return tostring(_type)
-				end, 
+				end,
 			})
 			Type.SetType(newType, _type)
 

@@ -18,7 +18,7 @@ local Types = {
 
 	Renderer = TypeMarker.Mark("Renderer"),
 	Node = TypeMarker.Mark("Node"),
-	ParentKey = TypeMarker.Mark("ParentKey"), 
+	ParentKey = TypeMarker.Mark("ParentKey"),
 }
 
 return Types

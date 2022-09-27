@@ -23,4 +23,3 @@ return function(elements, key)
 		return elements[key]
 	end
 end
- 

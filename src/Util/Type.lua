@@ -13,7 +13,7 @@ Type.GetType = function(content)
 			return mt._type
 		end
 	end
-	return "table" 
+	return "table"
 end
 
 Type.SetType = function(tbl, type)

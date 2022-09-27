@@ -17,7 +17,7 @@ return {
 	BillboardGui = function()
 		local instance = Instance.new("BillboardGui")
 		instance.ResetOnSpawn = false
-		instance.ZIndexBehavior = "Sibling" 
+		instance.ZIndexBehavior = "Sibling"
 		return instance
 	end,
 	Frame = function()

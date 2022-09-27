@@ -16,4 +16,4 @@ Why?
 - I wanted to add more flexibility with Components
 
 # Bonuses
-- Anyone who is familiar with Roact can easily learn Vision. 
+- Anyone who is familiar with Roact can easily learn Vision.

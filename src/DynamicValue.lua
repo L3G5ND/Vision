@@ -14,7 +14,7 @@ DynamicValue.new = function(value)
 		value = value,
 		_signal = Signal.new(),
 	}, {
-		__index = DynamicValue, 
+		__index = DynamicValue,
 	})
 	Type.SetType(self, Types.DynamicValue)
 

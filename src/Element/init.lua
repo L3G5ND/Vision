@@ -9,4 +9,3 @@ return {
 	build = require(script.BuildElement),
 	kind = require(script.ElementKind),
 }
- 

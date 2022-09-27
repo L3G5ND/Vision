@@ -48,7 +48,7 @@ function Renderer:unmount()
 	Enviroments.remove(self.script, self)
 
 	self:unmountNode({
-		node = self.root, 
+		node = self.root,
 	})
 
 	self.mounted = false

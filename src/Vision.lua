@@ -30,4 +30,4 @@ local Vision = {
 	Enviroments = require(Package.Enviroments).get(),
 }
 
-return Vision 
+return Vision

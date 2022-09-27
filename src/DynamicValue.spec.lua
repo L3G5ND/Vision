@@ -16,7 +16,7 @@ return function()
 
 		it("should return an object with type DynamicValue", function()
 			local dynamicValue = DynamicValue.new()
- 
+
 			expect(Type.GetType(dynamicValue)).to.equal(Types.DynamicValue)
 		end)
 	end)

@@ -31,4 +31,3 @@ setmetatable(BuildFunctions, {
 return function(type)
 	return BuildFunctions[type]()
 end
- 

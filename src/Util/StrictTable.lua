@@ -12,7 +12,7 @@ return function(table, name)
 	end
 	return setmetatable(
 		table,
-		Assign(mt, { 
+		Assign(mt, {
 			__index = function(tbl, key)
 				if indexFunc then
 					indexFunc()

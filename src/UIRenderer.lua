@@ -64,7 +64,7 @@ UIRenderer.Update = function(renderer, node, newElement)
 	end
 
 	local name = node.key
-	if newProps.Name then 
+	if newProps.Name then
 		name = newProps.Name
 	end
 	if typeof(node.key) == "string" then

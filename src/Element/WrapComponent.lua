@@ -53,4 +53,3 @@ local function wrapComponent(component, props, children)
 end
 
 return wrapComponent
- 
