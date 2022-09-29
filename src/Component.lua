@@ -1,5 +1,8 @@
 local Package = script.Parent
 
+local Props = Package.Props
+local Ref = require(Props.Ref)
+
 local Util = Package.Util
 local Type = require(Util.Type)
 local TypeMarker = require(Util.TypeMarker)
@@ -15,9 +18,9 @@ local Component = {}
 
 Component.defaultProps = {}
 
-function Component:init() end
+function Component:init(props, children) end
 
-function Component:render()
+function Component:render(props, children)
 	error("Componenet:render() is a required method")
 end
 
@@ -37,9 +40,9 @@ function Component:beforeRerender() end
 
 function Component:onRerender() end
 
-function Component:beforeUpdate() end
+function Component:beforeUpdate(newProps, newChildren) end
 
-function Component:onUpdate() end
+function Component:onUpdate(newProps, newChildren) end
 
 Component.new = function(name)
 	local self = setmetatable({
@@ -96,6 +99,17 @@ function Component:_mount(nodeTree, node)
 		parent = node.data.parent,
 	})
 
+	if not newElement.props[Ref] then
+		if component.props[Ref] then
+			local key, child = next(node.children)
+			local nextChild = next(node.children, key)
+
+			if not nextChild then
+				component.props[Ref]:set(child.data.object)
+			end
+		end
+	end
+
 	component:onMount()
 end
 
@@ -116,6 +130,20 @@ function Component:rerender()
 		children = newElement,
 		parent = Internal.node.data.parent,
 	})
+
+	if not newElement.props[Ref] then
+		if self.props[Ref] then
+			local key, child = next(Internal.node.children)
+			local nextChild = next(Internal.node.children, key)
+
+			if not nextChild then
+				local object = child.data.object
+				if self.props[Ref]:get() ~= object then
+					self.props[Ref]:set(object)
+				end
+			end
+		end
+	end
 
 	self:onRerender()
 end
@@ -141,12 +169,12 @@ end
 
 function Component:_update(newElement)
 	local newProps = Assign({}, self.defaultProps, self.cascade, self.props)
-	local children = Assign(newElement.children)
+	local newChildren = Assign(newElement.children)
 
-	self:beforeUpdate(newProps, children)
+	self:beforeUpdate(newProps, newChildren)
 
 	self.props = newProps
-	self.children = children
+	self.children = newChildren
 
 	local newElement = self:render(self.props, self.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
@@ -158,6 +186,20 @@ function Component:_update(newElement)
 		children = newElement,
 		parent = Internal.node.data.parent,
 	})
+
+	if not newElement.props[Ref] then
+		if self.props[Ref] then
+			local key, child = next(Internal.node.children)
+			local nextChild = next(Internal.node.children, key)
+
+			if not nextChild then
+				local object = child.data.object
+				if self.props[Ref]:get() ~= object then
+					self.props[Ref]:set(object)
+				end
+			end
+		end
+	end
 
 	self:onUpdate(self.props, self.children)
 end
