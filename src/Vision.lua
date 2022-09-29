@@ -14,11 +14,13 @@ local Vision = {
 	Component = require(Package.Component),
 
 	createRef = require(Package.CreateRef),
+	createApp = require(Package.CreateApp),
 	dynamicValue = require(Package.DynamicValue),
 
 	Event = require(Props.Event),
 	Change = require(Props.Change),
 	Ref = require(Props.Ref),
+	App = require(Props.App),
 	Cascade = require(Props.Cascade),
 
 	Renderer = require(Package.Renderer),

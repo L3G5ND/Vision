@@ -25,6 +25,9 @@ VisionAPI.component = Vision.Component
 VisionAPI.CreateRef = Vision.createRef
 VisionAPI.createRef = Vision.createRef
 
+VisionAPI.CreateApp = Vision.createApp
+VisionAPI.createApp = Vision.createApp
+
 VisionAPI.DynamicValue = Vision.dynamicValue
 VisionAPI.dynamicValue = Vision.dynamicValue
 
@@ -37,6 +40,9 @@ VisionAPI.Change = Vision.Change
 VisionAPI.change = Vision.Change
 VisionAPI.OnChange = Vision.Change
 VisionAPI.onChange = Vision.Change
+
+VisionAPI.App = Vision.App
+VisionAPI.app = Vision.App
 
 VisionAPI.Ref = Vision.Ref
 VisionAPI.ref = Vision.Ref
