@@ -1,3 +1,8 @@
+# 2.2.0
+* [Vision.Ref] is now auto asigned to components unless overwriten.
+* Vision.createApp() - Allows you to create a public interface for components.
+* [Vision.App] - Must be Vision.createApp() or a table.
+
 # 2.1.0
 * [Vision.Ref] now accepts functions. The reference is passed as the first argument of the function.
 
