@@ -2,6 +2,7 @@ local Package = script.Parent
 
 local Props = Package.Props
 local Ref = require(Props.Ref)
+local App = require(Props.App)
 
 local Util = Package.Util
 local Type = require(Util.Type)
@@ -103,11 +104,15 @@ function Component:_mount(nodeTree, node)
 		if component.props[Ref] then
 			local key, child = next(node.children)
 			local nextChild = next(node.children, key)
-
+	
 			if not nextChild then
 				component.props[Ref]:set(child.data.object)
 			end
 		end
+	end
+
+	if component.props[App] then
+		component.props[App]:set(component)
 	end
 
 	component:onMount()
@@ -200,7 +205,7 @@ function Component:_update(newElement)
 			end
 		end
 	end
-
+	
 	self:onUpdate(self.props, self.children)
 end
 

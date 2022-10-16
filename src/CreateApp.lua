@@ -1,4 +1,7 @@
+local Package = script.Parent
+
+local DynamicValue = require(Package.DynamicValue)
+
 return function()
-	local self = setmetatable({}, {})
-	return self
+	return DynamicValue.new()
 end

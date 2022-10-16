@@ -1,7 +1,10 @@
+local RunService = game:GetService('RunService')
+
 local Package = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
+local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 local EventManager = require(Package.EventManager)
@@ -72,7 +75,7 @@ PropertyUtil.IsNormalProperty = function(type, prop)
 	end
 end
 
-PropertyUtil.appleEventProperty = function(node, prop, value)
+PropertyUtil.applyEventProperty = function(node, prop, value)
 	local propType = Type.GetType(prop)
 
 	if not node.data.eventManager then
@@ -88,7 +91,21 @@ PropertyUtil.appleEventProperty = function(node, prop, value)
 	end
 end
 
-PropertyUtil.appleRefProperty = function(node, ref)
+PropertyUtil.applySizeProperty = function(node, value)
+	if typeof(value) ~= 'function' then
+		node.data.object.Size = value
+	else
+		if not node.data.viewportSizeEventManager then
+			node.data.viewportSizeEventManager = EventManager.new(workspace.CurrentCamera)
+		end
+		node.data.viewportSizeEventManager:Connect('Change', 'ViewportSize', function(viewportSize)
+			node.data.object.Size = value(viewportSize)
+		end)
+		node.data.object.Size = value(workspace.CurrentCamera.ViewportSize)
+	end
+end
+
+PropertyUtil.applyRefProperty = function(node, ref)
 	if typeof(ref) == "function" then
 		ref(node.data.object)
 	elseif Type.GetType(ref) == Types.DynamicValue then
@@ -135,11 +152,13 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
 	local oldValueType = Type.GetType(oldValue)
 
 	if propType == Types.Event or propType == Types.Change then
-		PropertyUtil.appleEventProperty(node, prop, newValue)
+		PropertyUtil.applyEventProperty(node, prop, newValue)
 	elseif prop == Types.Ref then
-		PropertyUtil.appleRefProperty(node, newValue)
+		PropertyUtil.applyRefProperty(node, newValue)
 	elseif newValueType == Types.DynamicValue then
 		PropertyUtil.applyDynamicValueProperty(node, prop, newValue)
+	elseif prop == 'Size' then
+		PropertyUtil.applySizeProperty(node, newValue)
 	elseif PropertyUtil.IsNormalProperty(object.ClassName, prop) then
 		PropertyUtil.applyNormalProperty(object, prop, newValue)
 	else

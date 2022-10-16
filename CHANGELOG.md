@@ -1,3 +1,8 @@
+$ 2.3.0
+* [Vision.App] - now returns the internal component.
+* Vision.createApp() - is now a dynamicValue that is set to the internal component on the mounting process.
+* The Size property of an element will be applied whenever the workspace.Camera.ViewportSize is changed, if the value is a function.
+
 # 2.2.0
 * [Vision.Ref] is now auto asigned to components unless overwriten.
 * Vision.createApp() - Allows you to create a public interface for components.
