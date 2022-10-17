@@ -1,4 +1,7 @@
-$ 2.3.0
+# 2.3.1
+* Fixed bugs revolving around Refs
+
+# 2.3.0
 * [Vision.App] - now returns the internal component.
 * Vision.createApp() - is now a dynamicValue that is set to the internal component on the mounting process.
 * The Size property of an element will be applied whenever the workspace.Camera.ViewportSize is changed, if the value is a function.

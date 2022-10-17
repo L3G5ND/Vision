@@ -120,7 +120,7 @@ function Renderer:mountNode(data)
 			parent = parent,
 		})
 	elseif kind == Element.kind.Function then
-		local props = Assign(node.cascade, element.props)
+		local props = Assign({}, node.cascade, element.props)
 		local newElement = element.component(props, element.children)
 		Assert(Type.GetType(newElement) == Types.Element, "Element Function must return a valid Element")
 
@@ -214,7 +214,7 @@ function Renderer:updateNode(data)
 				parent = parent,
 			})
 		elseif kind == Element.kind.Function then
-			local props = Assign(node.cascade, newElement.props)
+			local props = Assign({}, node.cascade, newElement.props)
 			local newElement = newElement.component(props, newElement.children)
 			Assert(Type.GetType(newElement) == Types.Element, "Element function must return a valid Element")
 

@@ -1,5 +1,4 @@
 return {
-
 	createElement = require(script.CreateElement),
 	createElementGroup = require(script.CreateElementGroup),
 	wrapSingleComponent = require(script.WrapSingleComponent),

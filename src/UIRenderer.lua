@@ -1,8 +1,5 @@
 local Package = script.Parent
 
-local Util = Package.Util
-local Assign = require(Util.Assign)
-
 local Element = require(Package.Element)
 local PropertyUtil = require(Package.PropertyUtil)
 local Types = require(Package.Types)

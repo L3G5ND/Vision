@@ -84,7 +84,7 @@ function Component:_mount(nodeTree, node)
 	}
 
 	component.props = Assign({}, self.defaultProps, node.cascade, props)
-	component.children = Assign(element.children)
+	component.children = element.children
 	component.cascade = node.cascade
 
 	component:init(component.props, component.children)
@@ -106,7 +106,14 @@ function Component:_mount(nodeTree, node)
 			local nextChild = next(node.children, key)
 	
 			if not nextChild then
-				component.props[Ref]:set(child.data.object)
+				local ref = component.props[Ref]
+				if typeof(ref) == "function" then
+					ref(child.data.object)
+				elseif Type.GetType(ref) == Types.DynamicValue then
+					ref:set(child.data.object)
+				else
+					error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+				end
 			end
 		end
 	end
@@ -144,7 +151,14 @@ function Component:rerender()
 			if not nextChild then
 				local object = child.data.object
 				if self.props[Ref]:get() ~= object then
-					self.props[Ref]:set(object)
+					local ref = self.props[Ref]
+					if typeof(ref) == "function" then
+						ref(object)
+					elseif Type.GetType(ref) == Types.DynamicValue then
+						ref:set(object)
+					else
+						error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+					end
 				end
 			end
 		end
@@ -174,7 +188,7 @@ end
 
 function Component:_update(newElement)
 	local newProps = Assign({}, self.defaultProps, self.cascade, self.props)
-	local newChildren = Assign(newElement.children)
+	local newChildren = newElement.children
 
 	self:beforeUpdate(newProps, newChildren)
 
@@ -200,7 +214,14 @@ function Component:_update(newElement)
 			if not nextChild then
 				local object = child.data.object
 				if self.props[Ref]:get() ~= object then
-					self.props[Ref]:set(object)
+					local ref = self.props[Ref]
+					if typeof(ref) == "function" then
+						ref(object)
+					elseif Type.GetType(ref) == Types.DynamicValue then
+						ref:set(object)
+					else
+						error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+					end
 				end
 			end
 		end
