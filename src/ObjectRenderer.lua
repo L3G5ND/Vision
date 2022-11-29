@@ -4,11 +4,10 @@ local Element = require(Package.Element)
 local PropertyUtil = require(Package.PropertyUtil)
 local Types = require(Package.Types)
 
-local UIRenderer = {}
+local ObjectRenderer = {}
 
-UIRenderer.Render = function(renderer, node)
+ObjectRenderer.Render = function(renderer, node)
 	local element = node.data.element
-	local parent = node.data.parent
 	local props = element.props
 	local kind = element.kind
 
@@ -55,8 +54,7 @@ UIRenderer.Render = function(renderer, node)
 	end
 end
 
-UIRenderer.Update = function(renderer, node, newElement)
-	local oldProps = node.data.element.props
+ObjectRenderer.Update = function(renderer, node, newElement)
 	local newProps = newElement.props
 
 	if node.data.eventManager then
@@ -102,4 +100,4 @@ UIRenderer.Update = function(renderer, node, newElement)
 	return node
 end
 
-return UIRenderer
+return ObjectRenderer

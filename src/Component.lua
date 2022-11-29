@@ -187,7 +187,7 @@ function Component:_unmount()
 end
 
 function Component:_update(newElement)
-	local newProps = Assign({}, self.defaultProps, self.cascade, self.props, newElement.props)
+	local newProps = Assign({}, self.defaultProps, self.cascade, newElement.props)
 	local newChildren = newElement.children
 
 	self:beforeUpdate(newProps, newChildren)

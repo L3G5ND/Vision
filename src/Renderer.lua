@@ -12,7 +12,7 @@ local Assign = require(Util.Assign)
 local Element = require(Package.Element)
 local Component = require(Package.Component)
 local Types = require(Package.Types)
-local UIRenderer = require(Package.UIRenderer)
+local ObjectRenderer = require(Package.ObjectRenderer)
 local Enviroments = require(Package.Enviroments)
 
 local Renderer = {}
@@ -112,7 +112,7 @@ function Renderer:mountNode(data)
 	local kind = element.kind
 
 	if kind == Element.kind.Normal then
-		UIRenderer.Render(self, node)
+		ObjectRenderer.Render(self, node)
 	elseif kind == Element.kind.Group then
 		self:updateChildren({
 			node = node,
@@ -132,9 +132,9 @@ function Renderer:mountNode(data)
 	elseif kind == Element.kind.Component then
 		Component._mount(element.component, self, node)
 	elseif kind == Element.kind.Wrapped then
-		UIRenderer.Render(self, node)
+		ObjectRenderer.Render(self, node)
 	elseif kind == Element.kind.WrappedSingle then
-		UIRenderer.Render(self, node)
+		ObjectRenderer.Render(self, node)
 	end
 
 	return node
@@ -206,7 +206,7 @@ function Renderer:updateNode(data)
 		local kind = newElement.kind
 
 		if kind == Element.kind.Normal then
-			node = UIRenderer.Update(self, node, newElement)
+			node = ObjectRenderer.Update(self, node, newElement)
 		elseif kind == Element.kind.Group then
 			self:updateChildren({
 				node = node,
@@ -226,9 +226,9 @@ function Renderer:updateNode(data)
 		elseif kind == Element.kind.Component then
 			Component._update(node.data._component, newElement)
 		elseif kind == Element.kind.Wrapped then
-			node = UIRenderer.Update(self, node, newElement)
+			node = ObjectRenderer.Update(self, node, newElement)
 		elseif kind == Element.kind.WrappedSingle then
-			node = UIRenderer.Update(self, node, newElement)
+			node = ObjectRenderer.Update(self, node, newElement)
 		end
 		node.data.element = newElement
 

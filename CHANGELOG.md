@@ -1,3 +1,7 @@
+# 2.3.3
+* Fixed old props in components being aplied when updated.
+* Updated some internal code.
+
 # 2.3.2
 * Fixed updated props in components not being aplied when updated.
 
