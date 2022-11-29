@@ -1,5 +1,8 @@
+# 2.3.2
+* Fixed updated props in components not being aplied when updated.
+
 # 2.3.1
-* Fixed bugs revolving around Refs
+* Fixed bugs revolving around Refs.
 
 # 2.3.0
 * [Vision.App] - now returns the internal component.
