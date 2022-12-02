@@ -25,21 +25,21 @@ function Component:render(props, children)
 	error("Componenet:render() is a required method")
 end
 
-function Component:beforeMount() end
+function Component:beforeMount(props, children) end
 
-function Component:onMount() end
+function Component:onMount(props, children) end
 
-function Component:beforeUnmount() end
+function Component:beforeUnmount(props, children) end
 
-function Component:onUnmount() end
+function Component:onUnmount(props, children) end
 
-function Component:shouldRerender()
+function Component:shouldRerender(props, children)
 	return true
 end
 
-function Component:beforeRerender() end
+function Component:beforeRerender(props, children) end
 
-function Component:onRerender() end
+function Component:onRerender(props, children) end
 
 function Component:beforeUpdate(newProps, newChildren) end
 
@@ -62,6 +62,26 @@ Component.new = function(name)
 	end
 
 	return self
+end
+
+local function assignRef(newElement, component, node)
+	if not newElement.props[Ref] then
+		if component.props[Ref] then
+			local key, child = next(node.children)
+			local nextChild = next(node.children, key)
+	
+			if not nextChild then
+				local ref = component.props[Ref]
+				if typeof(ref) == "function" then
+					ref(child.data.object)
+				elseif Type.GetType(ref) == Types.DynamicValue then
+					ref:set(child.data.object)
+				else
+					error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+				end
+			end
+		end
+	end
 end
 
 function Component:_mount(nodeTree, node)
@@ -89,7 +109,7 @@ function Component:_mount(nodeTree, node)
 
 	component:init(component.props, component.children)
 
-	component:beforeMount()
+	component:beforeMount(component.props, component.children)
 
 	local newElement = component:render(component.props, component.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
@@ -100,37 +120,23 @@ function Component:_mount(nodeTree, node)
 		parent = node.data.parent,
 	})
 
-	if not newElement.props[Ref] then
-		if component.props[Ref] then
-			local key, child = next(node.children)
-			local nextChild = next(node.children, key)
-	
-			if not nextChild then
-				local ref = component.props[Ref]
-				if typeof(ref) == "function" then
-					ref(child.data.object)
-				elseif Type.GetType(ref) == Types.DynamicValue then
-					ref:set(child.data.object)
-				else
-					error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
-				end
-			end
-		end
+	if newElement.props then
+		assignRef(newElement, component, node)
 	end
 
 	if component.props[App] then
 		component.props[App]:set(component)
 	end
 
-	component:onMount()
+	component:onMount(component.props, component.children)
 end
 
 function Component:rerender()
-	if not self:shouldRerender() then
+	if not self:shouldRerender(self.props, self.children) then
 		return
 	end
 
-	self:beforeRerender()
+	self:beforeRerender(self.props, self.children)
 
 	local newElement = self:render(self.props, self.children)
 	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
@@ -143,28 +149,11 @@ function Component:rerender()
 		parent = Internal.node.data.parent,
 	})
 
-	if not newElement.props[Ref] then
-		if self.props[Ref] then
-			local key, child = next(Internal.node.children)
-			local nextChild = next(Internal.node.children, key)
-
-			if not nextChild then
-				local object = child.data.object
-				if self.props[Ref]:get() ~= object then
-					local ref = self.props[Ref]
-					if typeof(ref) == "function" then
-						ref(object)
-					elseif Type.GetType(ref) == Types.DynamicValue then
-						ref:set(object)
-					else
-						error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
-					end
-				end
-			end
-		end
+	if newElement.props then
+		assignRef(newElement, self, Internal.node)
 	end
 
-	self:onRerender()
+	self:onRerender(self.props, self.children)
 end
 
 function Component:_unmount()
@@ -172,7 +161,7 @@ function Component:_unmount()
 	local node = Internal.node
 	local nodeTree = Internal.nodeTree
 
-	self:beforeUnmount()
+	self:beforeUnmount(self.props, self.children)
 
 	for _, node in pairs(node.children) do
 		nodeTree:unmountNode({
@@ -183,7 +172,7 @@ function Component:_unmount()
 		node.data.eventManager:Destroy()
 	end
 
-	self:onUnmount()
+	self:onUnmount(self.props, self.children)
 end
 
 function Component:_update(newElement)
@@ -206,25 +195,8 @@ function Component:_update(newElement)
 		parent = Internal.node.data.parent,
 	})
 
-	if not newElement.props[Ref] then
-		if self.props[Ref] then
-			local key, child = next(Internal.node.children)
-			local nextChild = next(Internal.node.children, key)
-
-			if not nextChild then
-				local object = child.data.object
-				if self.props[Ref]:get() ~= object then
-					local ref = self.props[Ref]
-					if typeof(ref) == "function" then
-						ref(object)
-					elseif Type.GetType(ref) == Types.DynamicValue then
-						ref:set(object)
-					else
-						error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
-					end
-				end
-			end
-		end
+	if newElement.props then
+		assignRef(newElement, self, Internal.node)
 	end
 	
 	self:onUpdate(self.props, self.children)

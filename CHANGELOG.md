@@ -1,5 +1,9 @@
+# 2.3.4
+* Fixed components erroring when assigned a ref property when an elementGroup is rendered.
+* All of the component methods get called with the props and children property.
+
 # 2.3.3
-* Fixed old props in components being aplied when updated.
+* Fixed old props in components being applied when updated.
 * Updated some internal code.
 
 # 2.3.2
