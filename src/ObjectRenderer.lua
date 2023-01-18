@@ -49,8 +49,8 @@ ObjectRenderer.Render = function(renderer, node)
 	if node.data.eventManager then
 		node.data.eventManager:Resume()
 	end
-	if node.data.viewportSizeEventManager then
-		node.data.viewportSizeEventManager:Resume()
+	if node.data.cameraEventManager then
+		node.data.cameraEventManager:Resume()
 	end
 end
 
@@ -60,8 +60,8 @@ ObjectRenderer.Update = function(renderer, node, newElement)
 	if node.data.eventManager then
 		node.data.eventManager:Suspend()
 	end
-	if node.data.viewportSizeEventManager then
-		node.data.viewportSizeEventManager:Suspend()
+	if node.data.cameraEventManager then
+		node.data.cameraEventManager:Suspend()
 	end
 
 	local name = node.key
@@ -93,8 +93,8 @@ ObjectRenderer.Update = function(renderer, node, newElement)
 	if node.data.eventManager then
 		node.data.eventManager:Resume()
 	end
-	if node.data.viewportSizeEventManager then
-		node.data.viewportSizeEventManager:Resume()
+	if node.data.cameraEventManager then
+		node.data.cameraEventManager:Resume()
 	end
 
 	return node

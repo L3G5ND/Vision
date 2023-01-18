@@ -91,17 +91,21 @@ PropertyUtil.applyEventProperty = function(node, prop, value)
 	end
 end
 
-PropertyUtil.applySizeProperty = function(node, value)
+PropertyUtil.applySpecialProperty = function(node, prop, value)
 	if typeof(value) ~= 'function' then
-		node.data.object.Size = value
+		node.data.object[prop] = value
 	else
-		if not node.data.viewportSizeEventManager then
-			node.data.viewportSizeEventManager = EventManager.new(workspace.CurrentCamera)
+		if not node.data.cameraEventManager then
+			node.data.cameraEventManager = EventManager.new(workspace.CurrentCamera)
+			node.data.updateSpecialProperties = {}
+			node.data.cameraEventManager:Connect('Change', 'ViewportSize', function(viewportSize)
+				for prop, value in pairs(node.data.updateSpecialProperties) do
+					node.data.object[prop] = value(viewportSize)
+				end
+			end)
 		end
-		node.data.viewportSizeEventManager:Connect('Change', 'ViewportSize', function(viewportSize)
-			node.data.object.Size = value(viewportSize)
-		end)
-		node.data.object.Size = value(workspace.CurrentCamera.ViewportSize)
+		node.data.updateSpecialProperties[prop] = value
+		node.data.object[prop] = value(workspace.CurrentCamera.ViewportSize)
 	end
 end
 
@@ -158,7 +162,9 @@ PropertyUtil.applyProperty = function(node, prop, newValue, oldValue)
 	elseif newValueType == Types.DynamicValue then
 		PropertyUtil.applyDynamicValueProperty(node, prop, newValue)
 	elseif prop == 'Size' then
-		PropertyUtil.applySizeProperty(node, newValue)
+		PropertyUtil.applySpecialProperty(node, 'Size', newValue)
+	elseif prop == 'Position' then
+		PropertyUtil.applySpecialProperty(node, 'Position', newValue)
 	elseif PropertyUtil.IsNormalProperty(object.ClassName, prop) then
 		PropertyUtil.applyNormalProperty(object, prop, newValue)
 	else

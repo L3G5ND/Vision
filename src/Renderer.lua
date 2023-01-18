@@ -155,8 +155,8 @@ function Renderer:unmountNode(data)
 		if node.data.eventManager then
 			node.data.eventManager:Destroy()
 		end
-		if node.data.viewportSizeEventManager then
-			node.data.viewportSizeEventManager:Destroy()
+		if node.data.cameraEventManager then
+			node.data.cameraEventManager:Destroy()
 		end
 		if node.data.object == Types.None then
 			return
