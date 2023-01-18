@@ -1,3 +1,6 @@
+# 2.4.0
+* Size and Position can now be assigned a function and will update the property of what ever the function returns everytime the cameras ViewportSize changes.
+
 # 2.3.4
 * Fixed components erroring when assigned a ref property when an elementGroup is rendered.
 * All of the component methods get called with the props and children property.
