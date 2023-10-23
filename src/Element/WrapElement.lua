@@ -1,5 +1,4 @@
 local Package = script.Parent.Parent
-local Element = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
@@ -7,10 +6,9 @@ local Assign = require(Util.Assign)
 local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
+local ElementKind = require(Package.ElementKind)
 
-local ElementKind = require(Element.ElementKind)
-
-local function wrapComponent(component, props, children)
+local function wrapElement(component, props, children)
 	if not props then
 		props = {}
 	end
@@ -26,7 +24,7 @@ local function wrapComponent(component, props, children)
 
 	local componentChildren = {}
 	for _, child in pairs(component:GetChildren()) do
-		componentChildren[child.name] = wrapComponent(child, {}, {})
+		componentChildren[child.name] = wrapElement(child, {}, {})
 	end
 	for _, child in pairs(children) do
 		local hasOverwrite = false
@@ -52,4 +50,4 @@ local function wrapComponent(component, props, children)
 	return element
 end
 
-return wrapComponent
+return wrapElement

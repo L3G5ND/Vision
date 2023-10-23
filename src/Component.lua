@@ -1,17 +1,15 @@
 local Package = script.Parent
 
-local Props = Package.Props
-local Ref = require(Props.Ref)
-local App = require(Props.App)
-
 local Util = Package.Util
 local Type = require(Util.Type)
 local TypeMarker = require(Util.TypeMarker)
 local Assign = require(Util.Assign)
 local Assert = require(Util.Assert)
+local Copy = require(Util.Copy)
 
 local Types = require(Package.Types)
-local Element = require(Package.Element)
+local Props = require(Package.Props)
+local ElementKind = require(Package.ElementKind)
 
 local InternalKey = TypeMarker.Mark("ComponentInternalKey")
 
@@ -53,7 +51,7 @@ Component.new = function(name)
 			return "[Vision] - Component: " .. self.name
 		end,
 	})
-	Type.SetType(self, Element.kind.Component)
+	Type.SetType(self, ElementKind.Component)
 
 	for key, value in pairs(Component) do
 		if key ~= "new" then
@@ -65,19 +63,21 @@ Component.new = function(name)
 end
 
 local function assignRef(newElement, component, node)
-	if not newElement.props[Ref] then
-		if component.props[Ref] then
+	if not newElement.props[Props.Ref] then
+		if component.props[Props.Ref] then
 			local key, child = next(node.children)
 			local nextChild = next(node.children, key)
-	
+
 			if not nextChild then
-				local ref = component.props[Ref]
+				local ref = component.props[Props.Ref]
 				if typeof(ref) == "function" then
 					ref(child.data.object)
 				elseif Type.GetType(ref) == Types.DynamicValue then
 					ref:set(child.data.object)
 				else
-					error("[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+					error(
+						"[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)"
+					)
 				end
 			end
 		end
@@ -99,6 +99,7 @@ function Component:_mount(nodeTree, node)
 	end
 
 	component[InternalKey] = {
+		app = Type.GetType(props[Props.App]) == Types.App and props[Props.App] or {},
 		node = node,
 		nodeTree = nodeTree,
 	}
@@ -106,8 +107,31 @@ function Component:_mount(nodeTree, node)
 	component.props = Assign({}, self.defaultProps, node.cascade, props)
 	component.children = element.children
 	component.cascade = node.cascade
+	component.buildApp = function(app)
+		for key, value in app do
+			component[InternalKey].app[key] = function(self, ...)
+				return value(...)
+			end
+		end
+	end
 
 	component:init(component.props, component.children)
+
+	Assert(component.state == nil or typeof(component.state) == "table", "Component.state must be a 'table'")
+	component[InternalKey].state = Copy(component.state)
+	function component:setState(newState)
+		local stateType = typeof(newState)
+		Assert(
+			stateType == "table" or stateType == "function",
+			"Component:setState() must be a 'table' or a 'function'"
+		)
+		if stateType == "function" then
+			newState = newState(component.state)
+		end
+		component[InternalKey].state = Copy(newState)
+		component.state = newState
+		component:rerender()
+	end
 
 	component:beforeMount(component.props, component.children)
 
@@ -122,10 +146,6 @@ function Component:_mount(nodeTree, node)
 
 	if newElement.props then
 		assignRef(newElement, component, node)
-	end
-
-	if component.props[App] then
-		component.props[App]:set(component)
 	end
 
 	component:onMount(component.props, component.children)
@@ -198,7 +218,7 @@ function Component:_update(newElement)
 	if newElement.props then
 		assignRef(newElement, self, Internal.node)
 	end
-	
+
 	self:onUpdate(self.props, self.children)
 end
 

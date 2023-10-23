@@ -1,22 +1,12 @@
-local Package = script.Parent.Parent
+local Package = script.Parent
 
 local Util = Package.Util
 local Assert = require(Util.Assert)
+local Copy = require(Util.Copy)
 
-local BuildFunctions = {}
+local DefualtElements = require(Package.DefualtElements)
 
-local function addBuildFunctions(container)
-	local name = container.Name
-	local src = require(container)
-	if typeof(src) == "table" then
-		for name, func in pairs(src) do
-			BuildFunctions[name] = func
-		end
-	end
-	BuildFunctions[name] = src
-end
-
-addBuildFunctions(Package.DefualtComponents)
+local BuildFunctions = Copy(DefualtElements)
 
 setmetatable(BuildFunctions, {
 	__index = function(tbl, key)

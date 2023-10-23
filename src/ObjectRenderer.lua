@@ -1,8 +1,10 @@
 local Package = script.Parent
 
-local Element = require(Package.Element)
 local PropertyUtil = require(Package.PropertyUtil)
 local Types = require(Package.Types)
+local Element = require(Package.Element)
+local ElementKind = require(Package.ElementKind)
+local BuildElement = require(Package.BuildElement)
 
 local ObjectRenderer = {}
 
@@ -12,13 +14,13 @@ ObjectRenderer.Render = function(renderer, node)
 	local kind = element.kind
 
 	local object
-	if (kind == Element.kind.Wrapped) or (kind == Element.kind.WrappedSingle) then
+	if (kind == ElementKind.Wrapped) or (kind == ElementKind.WrappedSingle) then
 		object = node.data.element.component:clone()
 		for _, child in pairs(object:GetChildren()) do
 			child:Destroy()
 		end
 	else
-		object = Element.build(element.component)
+		object = BuildElement(element.component)
 	end
 
 	node.data.object = object

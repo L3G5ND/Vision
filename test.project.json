@@ -1,27 +1,28 @@
 {
-  "name": "Vision Tests",
+  "name": "vision tests",
   "tree": {
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "$ignoreUnknownInstances": false,
-      "Vision": {
-        "$path": "src"
-      },
       "Packages": {
         "$path": "Packages"
+      },
+      "Vision": {
+        "$path": "src"
       }
     },
 
     "ServerScriptService": {
       "Tests": {
-          "$path": "Tests"
+        "$path": "tests"
       }
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "$ignoreUnknownInstances": false
+        "Examples": {
+          "$path": "examples"
+        }
       }
     }
   }

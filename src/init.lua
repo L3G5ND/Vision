@@ -1,73 +1,38 @@
 local Package = script
 
+local Element = require(Package.Element)
+local Props = require(Package.Props)
+local Renderer = require(Package.Renderer)
+
 local Util = Package.Util
 local StrictTable = require(Util.StrictTable)
 
-local Vision = require(Package.Vision)
+local Vision = {
+	createElement = Element.createElement,
+	createElementGroup = Element.createElementGroup,
+	wrapElement = Element.wrapElement,
+	wrapSingleElement = Element.wrapSingleElement,
 
-local VisionAPI = {}
+	Component = require(Package.Component),
 
-VisionAPI.createElement = Vision.createElement
-VisionAPI.element = Vision.createElement
+	createRef = require(Package.CreateRef),
+	createApp = require(Package.CreateApp),
+	dynamicValue = require(Package.DynamicValue),
 
-VisionAPI.createElementGroup = Vision.createElementGroup
-VisionAPI.elementGroup = Vision.createElementGroup
+	Event = Props.Event,
+	Change = Props.Change,
+	Ref = Props.Ref,
+	App = Props.App,
+	Cascade = Props.Cascade,
 
-VisionAPI.wrapComponent = Vision.wrapComponent
-VisionAPI.wrap = Vision.wrapComponent
+	mount = Renderer.mount,
 
-VisionAPI.wrapSingleComponent = Vision.wrapSingleComponent
-VisionAPI.wrapSingle = Vision.wrapSingleComponent
+	oneChild = require(Package.OneChild),
+}
 
-VisionAPI.Component = Vision.Component
-VisionAPI.component = Vision.Component
-
-VisionAPI.CreateRef = Vision.createRef
-VisionAPI.createRef = Vision.createRef
-
-VisionAPI.CreateApp = Vision.createApp
-VisionAPI.createApp = Vision.createApp
-
-VisionAPI.DynamicValue = Vision.dynamicValue
-VisionAPI.dynamicValue = Vision.dynamicValue
-
-VisionAPI.Event = Vision.Event
-VisionAPI.event = Vision.Event
-VisionAPI.OnEvent = Vision.Event
-VisionAPI.onEvent = Vision.Event
-
-VisionAPI.Change = Vision.Change
-VisionAPI.change = Vision.Change
-VisionAPI.OnChange = Vision.Change
-VisionAPI.onChange = Vision.Change
-
-VisionAPI.App = Vision.App
-VisionAPI.app = Vision.App
-
-VisionAPI.Ref = Vision.Ref
-VisionAPI.ref = Vision.Ref
-
-VisionAPI.Cascade = Vision.Cascade
-VisionAPI.cascade = Vision.Cascade
-
-VisionAPI.Renderer = Vision.Renderer
-VisionAPI.renderer = Vision.Renderer
-
-VisionAPI.Mount = Vision.Renderer.mount
-VisionAPI.mount = Vision.Renderer.mount
-
-VisionAPI.OneChild = Vision.oneChild
-VisionAPI.oneChild = Vision.oneChild
-
-VisionAPI.Types = Vision.Types
-VisionAPI.types = Vision.Types
-
-VisionAPI.Enviroments = Vision.Enviroments
-VisionAPI.enviroments = Vision.Enviroments
-
-setmetatable(VisionAPI, {
+setmetatable(Vision, {
 	__call = function(tbl, ...)
-		return Vision.createElement(...)
+		return Element.createElement(...)
 	end,
 })
-return StrictTable(VisionAPI, "Vision")
+return StrictTable(Vision, "Vision")

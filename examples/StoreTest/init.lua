@@ -3,15 +3,15 @@ local RS = game:GetService("ReplicatedStorage")
 local Vision = require(RS.Vision)
 local Rodux = require(RS.Packages.Rodux)
 
-local element = Vision.createElement
-
 local plr = game:GetService("Players").LocalPlayer
 local plrGui = plr.PlayerGui
+
+local element = Vision.createElement
 
 local CounterApp = Vision.Component.new("CounterApp")
 
 function CounterApp:init(props, children)
-	self.store = props.store -- or self.cascade.store
+	self.store = props.store
 	self.increment = function()
 		self.store:dispatch({
 			type = "increment",
@@ -74,16 +74,18 @@ end, {
 	value = 0,
 })
 
-function CounterAppCreator(props, children)
-	return element(CounterApp, props, children)
-end
+return function()
+	local tree = Vision.mount(
+		element(CounterApp, {
+			store = store
+		}),
+		plrGui,
+		"CounterApp"
+	)
 
-local tree = Vision.mount(
-	element(CounterAppCreator, {
-		[Vision.Cascade] = {
-			store = store,
-		},
-	}),
-	plrGui,
-	"CounterApp"
-)
+	local function stop()
+		tree:unmount()
+	end
+
+	return stop
+end

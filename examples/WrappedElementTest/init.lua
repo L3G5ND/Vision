@@ -5,6 +5,8 @@ local plrGui = plr.PlayerGui
 
 local Vision = require(RS.Vision)
 
+local wrapElement = Vision.wrapElement
+
 local UI = Instance.new("ScreenGui")
 UI.IgnoreGuiInset = true
 UI.ResetOnSpawn = false
@@ -23,9 +25,9 @@ ImageButton.AnchorPoint = Vector2.new(0.5, 0.5)
 ImageButton.BackgroundColor3 = Color3.fromRGB(107, 107, 107)
 ImageButton.BorderSizePixel = 0
 
-local wrappedElement = Vision.wrap(UI, {}, {
-	Vision.wrap(Frame, {}, {
-		Vision.wrap(ImageButton, {
+local wrappedElement = wrapElement(UI, {}, {
+	wrapElement(Frame, {}, {
+		wrapElement(ImageButton, {
 			[Vision.Event.MouseButton1Down] = function()
 				print("down")
 			end,
@@ -36,4 +38,12 @@ local wrappedElement = Vision.wrap(UI, {}, {
 	}),
 })
 
-local tree = Vision.mount(wrappedElement, plrGui)
+return function()
+	local tree = Vision.mount(wrappedElement, plrGui)
+
+	local function stop()
+		tree:unmount()
+	end
+
+	return stop
+end

@@ -1,3 +1,7 @@
+# 2.5.0
+* New way to create Vision apps
+* Component state compatibility
+
 # 2.4.0
 * Size and Position can now be assigned a function and will update the property of what ever the function returns everytime the cameras ViewportSize changes.
 

@@ -1,0 +1,15 @@
+{
+    "name": "vision publish",
+    "tree": {
+      "$className": "DataModel",
+  
+      "ReplicatedStorage": {
+        "Packages": {
+          "$path": "Packages"
+        },
+        "Vision": {
+          "$path": "src"
+        }
+      }
+    }
+}

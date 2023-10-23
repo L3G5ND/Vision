@@ -1,19 +1,18 @@
 local Package = script.Parent
 
-local Props = Package.Props
-local CascadeProp = require(Props.Cascade)
-
 local Util = Package.Util
 local Type = require(Util.Type)
 local DeepEqual = require(Util.DeepEqual)
 local Assert = require(Util.Assert)
 local Assign = require(Util.Assign)
 
-local Element = require(Package.Element)
 local Component = require(Package.Component)
 local Types = require(Package.Types)
+local Props = require(Package.Props)
 local ObjectRenderer = require(Package.ObjectRenderer)
-local Enviroments = require(Package.Enviroments)
+local Element = require(Package.Element)
+local ElementKind = require(Package.ElementKind)
+local ElementUtil = require(Package.ElementUtil)
 
 local Renderer = {}
 Renderer.RootKey = "root"
@@ -41,18 +40,14 @@ function Renderer.mount(element, parent, name)
 	Assert(tree:getRootNode().data.parent == parent, "Parent property cannot be assigned to Host Nodes")
 
 	tree.mounted = true
-	Enviroments.add(tree.script, tree)
 
 	return tree
 end
 
 function Renderer:unmount()
-	Enviroments.remove(self.script, self)
-
 	self:unmountNode({
 		node = self.root,
 	})
-
 	self.mounted = false
 end
 
@@ -63,14 +58,6 @@ function Renderer:update(newElement)
 		node = self.root,
 		newElement = newElement,
 	})
-end
-
-function Renderer.isRenderer(tree)
-	return Type.GetType(tree) == Types.Renderer
-end
-
-function Renderer.isRootNode(node)
-	return node.key == "root"
 end
 
 function Renderer:getRootNode()
@@ -97,11 +84,11 @@ function Renderer:mountNode(data)
 	Type.SetType(node, Types.Node)
 
 	if element.props then
-		local cascadeProp = element.props[CascadeProp]
+		local cascadeProp = element.props[Props.Cascade]
 		if cascadeProp then
 			Assert(
 				typeof(cascadeProp) == "table",
-				"Invalid property [" .. tostring(Types.Cascader) .. "] (type 'table' expected)"
+				"Invalid property [" .. tostring(Types.Cascade) .. "] (type 'table' expected)"
 			)
 			for key, value in pairs(cascadeProp) do
 				node.cascade[key] = value
@@ -111,15 +98,15 @@ function Renderer:mountNode(data)
 
 	local kind = element.kind
 
-	if kind == Element.kind.Normal then
+	if kind == ElementKind.Normal then
 		ObjectRenderer.Render(self, node)
-	elseif kind == Element.kind.Group then
+	elseif kind == ElementKind.Group then
 		self:updateChildren({
 			node = node,
 			children = element.elements,
 			parent = parent,
 		})
-	elseif kind == Element.kind.Function then
+	elseif kind == ElementKind.Function then
 		local props = Assign({}, node.cascade, element.props)
 		local newElement = element.component(props, element.children)
 		Assert(Type.GetType(newElement) == Types.Element, "Element Function must return a valid Element")
@@ -129,11 +116,11 @@ function Renderer:mountNode(data)
 			children = newElement,
 			parent = node.data.parent,
 		})
-	elseif kind == Element.kind.Component then
+	elseif kind == ElementKind.Component then
 		Component._mount(element.component, self, node)
-	elseif kind == Element.kind.Wrapped then
+	elseif kind == ElementKind.Wrapped then
 		ObjectRenderer.Render(self, node)
-	elseif kind == Element.kind.WrappedSingle then
+	elseif kind == ElementKind.WrappedSingle then
 		ObjectRenderer.Render(self, node)
 	end
 
@@ -146,7 +133,7 @@ function Renderer:unmountNode(data)
 
 	local kind = element.kind
 
-	if kind ~= Element.kind.Component then
+	if kind ~= ElementKind.Component then
 		for _, node in pairs(node.children) do
 			self:unmountNode({
 				node = node,
@@ -191,11 +178,11 @@ function Renderer:updateNode(data)
 		})
 	else
 		if newElement.props then
-			local cascadeProp = newElement.props[CascadeProp]
+			local cascadeProp = newElement.props[Props.Cascade]
 			if cascadeProp then
 				Assert(
 					typeof(cascadeProp) == "table",
-					"Invalid property [" .. tostring(Types.Cascader) .. "] (type 'table' expected)"
+					"Invalid property [" .. tostring(Types.Cascade) .. "] (type 'table' expected)"
 				)
 				for key, value in pairs(cascadeProp) do
 					node.cascade[key] = value
@@ -203,17 +190,17 @@ function Renderer:updateNode(data)
 			end
 		end
 
-		local kind = newElement.kind
+		local kind = element.kind
 
-		if kind == Element.kind.Normal then
+		if kind == ElementKind.Normal then
 			node = ObjectRenderer.Update(self, node, newElement)
-		elseif kind == Element.kind.Group then
+		elseif kind == ElementKind.Group then
 			self:updateChildren({
 				node = node,
 				children = newElement.elements,
 				parent = parent,
 			})
-		elseif kind == Element.kind.Function then
+		elseif kind == ElementKind.Function then
 			local props = Assign({}, node.cascade, newElement.props)
 			local newElement = newElement.component(props, newElement.children)
 			Assert(Type.GetType(newElement) == Types.Element, "Element function must return a valid Element")
@@ -223,11 +210,11 @@ function Renderer:updateNode(data)
 				children = newElement,
 				parent = parent,
 			})
-		elseif kind == Element.kind.Component then
+		elseif kind == ElementKind.Component then
 			Component._update(node.data._component, newElement)
-		elseif kind == Element.kind.Wrapped then
+		elseif kind == ElementKind.Wrapped then
 			node = ObjectRenderer.Update(self, node, newElement)
-		elseif kind == Element.kind.WrappedSingle then
+		elseif kind == ElementKind.WrappedSingle then
 			node = ObjectRenderer.Update(self, node, newElement)
 		end
 		node.data.element = newElement
@@ -244,7 +231,7 @@ function Renderer:updateChildren(data)
 	local updateNodes = {}
 
 	for key, child in pairs(node.children) do
-		local newElement = Element.fromKey(newChildren, key)
+		local newElement = ElementUtil.fromKey(newChildren, key)
 
 		if not newElement then
 			self:unmountNode({
@@ -264,7 +251,7 @@ function Renderer:updateChildren(data)
 		end
 	end
 
-	for key, child in Element.iterator(newChildren) do
+	for key, child in ElementUtil.Iterator(newChildren) do
 		if not updateNodes[key] then
 			local _key = key
 			if key == Types.ParentKey then

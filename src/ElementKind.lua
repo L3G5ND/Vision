@@ -1,4 +1,4 @@
-local Package = script.Parent.Parent
+local Package = script.Parent
 
 local Util = Package.Util
 local TypeMarker = require(Util.TypeMarker)

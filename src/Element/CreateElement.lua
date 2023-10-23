@@ -1,13 +1,11 @@
 local Package = script.Parent.Parent
-local Element = script.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
 local Assert = require(Util.Assert)
 
 local Types = require(Package.Types)
-
-local ElementKind = require(Element.ElementKind)
+local ElementKind = require(Package.ElementKind)
 
 return function(component, props, children)
 	if not props then

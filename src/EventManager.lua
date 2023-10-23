@@ -22,7 +22,6 @@ EventManager.types = {
 
 function EventManager.new(object)
 	return setmetatable({
-
 		_suspendedEvents = {},
 		_connections = {},
 		_callbacks = {},
