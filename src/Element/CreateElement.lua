@@ -2,7 +2,7 @@ local Package = script.Parent.Parent
 
 local Util = Package.Util
 local Type = require(Util.Type)
-local Assert = require(Util.Assert)
+local assert = require(Util.Assert)
 
 local Types = require(Package.Types)
 local ElementKind = require(Package.ElementKind)
@@ -15,8 +15,8 @@ return function(component, props, children)
 		children = {}
 	end
 
-	Assert(typeof(props) == "table", "Invalid argument #2 (Must be of type 'table')")
-	Assert(typeof(children) == "table", "Invalid argument #3 (Must be of type 'table')")
+	assert(typeof(props) == "table", "Invalid argument #2 (Must be of type 'table')")
+	assert(typeof(children) == "table", "Invalid argument #3 (Must be of type 'table')")
 
 	local kind = ElementKind.Normal
 	if Type.GetType(component) == "function" then

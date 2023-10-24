@@ -1,4 +1,7 @@
-# 2.5.0
+#2.6.0
+* Much better way to deal with creating apps inside of components
+
+#2.5.0
 * New way to create Vision apps
 * Component state compatibility
 

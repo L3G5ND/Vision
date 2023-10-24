@@ -4,8 +4,9 @@ local Util = Package.Util
 local Type = require(Util.Type)
 local TypeMarker = require(Util.TypeMarker)
 local Assign = require(Util.Assign)
-local Assert = require(Util.Assert)
 local Copy = require(Util.Copy)
+local assert = require(Util.Assert)
+local error = require(Util.Error)
 
 local Types = require(Package.Types)
 local Props = require(Package.Props)
@@ -50,6 +51,18 @@ Component.new = function(name)
 		__tostring = function(self)
 			return "[Vision] - Component: " .. self.name
 		end,
+		__index = function(self, key)
+			if key == "app" then
+				return self[InternalKey].app
+			end
+		end,
+		__newindex = function(self, key, value)
+			if key == "app" then
+				error("Cannot override Component.app")
+			else
+				rawset(self, key, value)
+			end
+		end,
 	})
 	Type.SetType(self, ElementKind.Component)
 
@@ -75,9 +88,7 @@ local function assignRef(newElement, component, node)
 				elseif Type.GetType(ref) == Types.DynamicValue then
 					ref:set(child.data.object)
 				else
-					error(
-						"[Vision] - Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)"
-					)
+					error("Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
 				end
 			end
 		end
@@ -98,8 +109,16 @@ function Component:_mount(nodeTree, node)
 		end
 	end
 
+	local app = Type.GetType(props[Props.App]) == Types.App and props[Props.App] or {}
+	local appMetatable = getmetatable(app)
+	if appMetatable then
+		appMetatable.__index = function(self, key)
+			return component[key]
+		end
+	end
+
 	component[InternalKey] = {
-		app = Type.GetType(props[Props.App]) == Types.App and props[Props.App] or {},
+		app = app,
 		node = node,
 		nodeTree = nodeTree,
 	}
@@ -107,21 +126,14 @@ function Component:_mount(nodeTree, node)
 	component.props = Assign({}, self.defaultProps, node.cascade, props)
 	component.children = element.children
 	component.cascade = node.cascade
-	component.buildApp = function(app)
-		for key, value in app do
-			component[InternalKey].app[key] = function(self, ...)
-				return value(...)
-			end
-		end
-	end
 
 	component:init(component.props, component.children)
 
-	Assert(component.state == nil or typeof(component.state) == "table", "Component.state must be a 'table'")
+	assert(component.state == nil or typeof(component.state) == "table", "Component.state must be a 'table'")
 	component[InternalKey].state = Copy(component.state)
 	function component:setState(newState)
 		local stateType = typeof(newState)
-		Assert(
+		assert(
 			stateType == "table" or stateType == "function",
 			"Component:setState() must be a 'table' or a 'function'"
 		)
@@ -136,7 +148,7 @@ function Component:_mount(nodeTree, node)
 	component:beforeMount(component.props, component.children)
 
 	local newElement = component:render(component.props, component.children)
-	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
+	assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
 
 	nodeTree:updateChildren({
 		node = node,
@@ -159,7 +171,7 @@ function Component:rerender()
 	self:beforeRerender(self.props, self.children)
 
 	local newElement = self:render(self.props, self.children)
-	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
+	assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
 
 	local Internal = self[InternalKey]
 
@@ -205,7 +217,7 @@ function Component:_update(newElement)
 	self.children = newChildren
 
 	local newElement = self:render(self.props, self.children)
-	Assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
+	assert(Type.GetType(newElement) == Types.Element, "Component:render() must return a valid Element")
 
 	local Internal = self[InternalKey]
 

@@ -12,11 +12,11 @@ local AppTest = Vision.Component.new("App")
 
 function AppTest:init()
     self.color = Vision.dynamicValue.new(Color3.fromRGB(56, 56, 56))
-    self.buildApp({
-        setColor = function(color)
-            self.color:set(color)
-        end
-    })
+
+    self.app.borderColor = Vision.dynamicValue.new(Color3.new(1, 1, 1))
+    function self.app:setColor(color)
+        self.color:set(color)
+    end
 end
 
 function AppTest:render()
@@ -25,7 +25,7 @@ function AppTest:render()
 			Position = UDim2.fromScale(.5, .5),
 			Size = UDim2.fromOffset(264, 264),
 			AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+            BackgroundColor3 = self.app.borderColor
 		}, {
             element("Frame", {
                 Position = UDim2.fromScale(.5, .5),
@@ -52,6 +52,8 @@ return function()
 	end
 
     task.spawn(function()
+        app.borderColor:set(Color3.fromRGB(26, 26, 26))
+
         local hue = 0
 		local connection
         connection = RunService.RenderStepped:Connect(function(dt)

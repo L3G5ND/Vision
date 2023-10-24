@@ -3,8 +3,8 @@ local Package = script.Parent
 local Util = Package.Util
 local Type = require(Util.Type)
 local DeepEqual = require(Util.DeepEqual)
-local Assert = require(Util.Assert)
 local Assign = require(Util.Assign)
+local assert = require(Util.Assert)
 
 local Component = require(Package.Component)
 local Types = require(Package.Types)
@@ -18,9 +18,9 @@ local Renderer = {}
 Renderer.RootKey = "root"
 
 function Renderer.mount(element, parent, name)
-	Assert(Type.GetType(element) == Types.Element, "Invalid argument #1 (Must be a valid Element)")
-	Assert(parent, "Invalid argument #2 (Must be a Roblox Instance)")
-	Assert(typeof(parent) == "Instance", "Invalid argument #2 (Must be a Roblox Instance)")
+	assert(Type.GetType(element) == Types.Element, "Invalid argument #1 (Must be a valid Element)")
+	assert(parent, "Invalid argument #2 (Must be a Roblox Instance)")
+	assert(typeof(parent) == "Instance", "Invalid argument #2 (Must be a Roblox Instance)")
 
 	local tree = setmetatable({
 		root = nil,
@@ -37,7 +37,7 @@ function Renderer.mount(element, parent, name)
 		key = name or Renderer.RootKey,
 	})
 
-	Assert(tree:getRootNode().data.parent == parent, "Parent property cannot be assigned to Host Nodes")
+	assert(tree:getRootNode().data.parent == parent, "Parent property cannot be assigned to Host Nodes")
 
 	tree.mounted = true
 
@@ -52,7 +52,7 @@ function Renderer:unmount()
 end
 
 function Renderer:update(newElement)
-	Assert(Type.GetType(newElement) == Types.Element, "Invalid argument #1 (Must be a valid Element)")
+	assert(Type.GetType(newElement) == Types.Element, "Invalid argument #1 (Must be a valid Element)")
 
 	self.root = self:updateNode({
 		node = self.root,
@@ -86,7 +86,7 @@ function Renderer:mountNode(data)
 	if element.props then
 		local cascadeProp = element.props[Props.Cascade]
 		if cascadeProp then
-			Assert(
+			assert(
 				typeof(cascadeProp) == "table",
 				"Invalid property [" .. tostring(Types.Cascade) .. "] (type 'table' expected)"
 			)
@@ -109,7 +109,7 @@ function Renderer:mountNode(data)
 	elseif kind == ElementKind.Function then
 		local props = Assign({}, node.cascade, element.props)
 		local newElement = element.component(props, element.children)
-		Assert(Type.GetType(newElement) == Types.Element, "Element Function must return a valid Element")
+		assert(Type.GetType(newElement) == Types.Element, "Element Function must return a valid Element")
 
 		self:updateChildren({
 			node = node,
@@ -180,7 +180,7 @@ function Renderer:updateNode(data)
 		if newElement.props then
 			local cascadeProp = newElement.props[Props.Cascade]
 			if cascadeProp then
-				Assert(
+				assert(
 					typeof(cascadeProp) == "table",
 					"Invalid property [" .. tostring(Types.Cascade) .. "] (type 'table' expected)"
 				)
@@ -203,7 +203,7 @@ function Renderer:updateNode(data)
 		elseif kind == ElementKind.Function then
 			local props = Assign({}, node.cascade, newElement.props)
 			local newElement = newElement.component(props, newElement.children)
-			Assert(Type.GetType(newElement) == Types.Element, "Element function must return a valid Element")
+			assert(Type.GetType(newElement) == Types.Element, "Element function must return a valid Element")
 
 			self:updateChildren({
 				node = node,
