@@ -15,7 +15,7 @@ function AppTest:init()
 
     self.app.borderColor = Vision.dynamicValue.new(Color3.new(1, 1, 1))
     function self.app:setColor(color)
-        self.color:set(color)
+        self.component.color:set(color)
     end
 end
 

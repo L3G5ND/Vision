@@ -1,3 +1,6 @@
+#2.6.1
+* Safer way of accessing apps components
+
 #2.6.0
 * Much better way to deal with creating apps inside of components
 

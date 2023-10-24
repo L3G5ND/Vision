@@ -113,7 +113,16 @@ function Component:_mount(nodeTree, node)
 	local appMetatable = getmetatable(app)
 	if appMetatable then
 		appMetatable.__index = function(self, key)
-			return component[key]
+			if key == "component" then
+				return component
+			end
+		end
+		appMetatable.__newindex = function(self, key, value)
+			if key == "component" then
+				error("Cannot override Component.app.component")
+			else
+				rawset(self, key, value)
+			end
 		end
 	end
 
