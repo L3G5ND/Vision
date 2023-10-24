@@ -116,6 +116,10 @@ function Component:_mount(nodeTree, node)
 			if key == "component" then
 				return component
 			end
+			local value = rawget(component, key)
+			if typeof(value) ~= 'function' then
+				return value
+			end
 		end
 		appMetatable.__newindex = function(self, key, value)
 			if key == "component" then
