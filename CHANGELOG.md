@@ -1,3 +1,7 @@
+# 2.6.3
+* Fixed/Improved Component:setState()
+* Vision.None + Vision.Types added
+
 # 2.6.2
 * Safer way of accessing apps components
 

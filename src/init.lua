@@ -3,6 +3,7 @@ local Package = script
 local Element = require(Package.Element)
 local Props = require(Package.Props)
 local Renderer = require(Package.Renderer)
+local Types = require(Package.Types)
 
 local Util = Package.Util
 local StrictTable = require(Util.StrictTable)
@@ -28,6 +29,9 @@ local Vision = {
 	mount = Renderer.mount,
 
 	oneChild = require(Package.OneChild),
+
+	Types = Types,
+	None = Types.None
 }
 
 setmetatable(Vision, {

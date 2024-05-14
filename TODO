@@ -1,0 +1,9 @@
+Component Inheritance
+Stop running component unmount methods multiple times
+allow a table in OneChild if theres only one child in table + not returning proper element resulting in errors
+better errors
+Fix Cascade Property
+Fix WrapElement
+Allow Changing Default Elements
+Correct Font + Posible others in defaultElements
+LightInflucence 0 in defaultElements

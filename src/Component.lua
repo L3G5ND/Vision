@@ -150,11 +150,14 @@ function Component:_mount(nodeTree, node)
 			stateType == "table" or stateType == "function",
 			"Component:setState() must be a 'table' or a 'function'"
 		)
+		if not component.state then
+			component.state = {}
+		end
 		if stateType == "function" then
 			newState = newState(component.state)
 		end
 		component[InternalKey].state = Copy(newState)
-		component.state = newState
+		component.state = Assign(component.state, newState)
 		component:rerender()
 	end
 
