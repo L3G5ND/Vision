@@ -79,6 +79,7 @@ function Renderer:mountNode(data)
 			parent = parent,
 			element = element,
 			object = Types.None,
+			dynamicValueConnections = {}
 		},
 	}
 	Type.SetType(node, Types.Node)

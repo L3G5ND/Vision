@@ -1,4 +1,7 @@
 # 2.6.3
+* Fixed a couple component bugs
+
+# 2.6.3
 * Fixed/Improved Component:setState()
 * Vision.None + Vision.Types added
 

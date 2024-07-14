@@ -7,3 +7,7 @@ Fix WrapElement
 Allow Changing Default Elements
 Correct Font + Posible others in defaultElements
 LightInflucence 0 in defaultElements
+Make State better
+Useful table manipulation ex. Vision.Unpack
+Size = Vision.Event.ViewportSizeChanged(function() end)
+self:setState(function() return end) doesnt rerender

@@ -120,13 +120,16 @@ PropertyUtil.applyRefProperty = function(node, ref)
 end
 
 PropertyUtil.applyDynamicValueProperty = function(node, prop, value)
+	if node.data.dynamicValueConnections[prop] then
+		node.data.dynamicValueConnections[prop]()
+	end
 	if value.isMap then
-		value.DynamicValue:onChanged(function()
+		node.data.dynamicValueConnections[prop] = value.DynamicValue:onChanged(function()
 			PropertyUtil.applyNormalProperty(node.data.object, prop, value:get())
 		end)
 		PropertyUtil.applyNormalProperty(node.data.object, prop, value:get())
 	else
-		value:onChanged(function()
+		node.data.dynamicValueConnections[prop] = value:onChanged(function()
 			PropertyUtil.applyNormalProperty(node.data.object, prop, value:get())
 		end)
 		PropertyUtil.applyNormalProperty(node.data.object, prop, value:get())

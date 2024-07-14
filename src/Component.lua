@@ -54,6 +54,8 @@ Component.new = function(name)
 		__index = function(self, key)
 			if key == "app" then
 				return self[InternalKey].app
+			else
+				return Component[key]
 			end
 		end,
 		__newindex = function(self, key, value)
@@ -66,31 +68,32 @@ Component.new = function(name)
 	})
 	Type.SetType(self, ElementKind.Component)
 
-	for key, value in pairs(Component) do
-		if key ~= "new" then
-			self[key] = value
-		end
-	end
-
 	return self
 end
 
-local function assignRef(newElement, component, node)
-	if not newElement.props[Props.Ref] then
-		if component.props[Props.Ref] then
-			local key, child = next(node.children)
-			local nextChild = next(node.children, key)
-
-			if not nextChild then
+local function assignRef(component, node)
+	local children = node.children
+	while true do
+		local key, child = next(children)
+		local nextChild = next(children, key)
+		if not nextChild then
+			if child.data.element.kind == ElementKind.Normal then
 				local ref = component.props[Props.Ref]
-				if typeof(ref) == "function" then
-					ref(child.data.object)
-				elseif Type.GetType(ref) == Types.DynamicValue then
-					ref:set(child.data.object)
-				else
-					error("Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+				if ref then
+					if typeof(ref) == "function" then
+						ref(child.data.object)
+					elseif Type.GetType(ref) == Types.DynamicValue then
+						ref:set(child.data.object)
+					else
+						error("Invalid property [Vision.Ref] (type 'function' or type Types.DynamicValue expected)")
+					end
 				end
+				return
+			else
+				children = child.children
 			end
+		else
+			return
 		end
 	end
 end
@@ -139,10 +142,11 @@ function Component:_mount(nodeTree, node)
 	component.props = Assign({}, self.defaultProps, node.cascade, props)
 	component.children = element.children
 	component.cascade = node.cascade
+	component.state = {}
 
 	component:init(component.props, component.children)
 
-	assert(component.state == nil or typeof(component.state) == "table", "Component.state must be a 'table'")
+	assert(typeof(component.state) == "table", "Component.state must be a 'table'")
 	component[InternalKey].state = Copy(component.state)
 	function component:setState(newState)
 		local stateType = typeof(newState)
@@ -173,7 +177,7 @@ function Component:_mount(nodeTree, node)
 	})
 
 	if newElement.props then
-		assignRef(newElement, component, node)
+		assignRef(component, node)
 	end
 
 	component:onMount(component.props, component.children)
@@ -198,7 +202,7 @@ function Component:rerender()
 	})
 
 	if newElement.props then
-		assignRef(newElement, self, Internal.node)
+		assignRef(self, Internal.node)
 	end
 
 	self:onRerender(self.props, self.children)
@@ -244,7 +248,7 @@ function Component:_update(newElement)
 	})
 
 	if newElement.props then
-		assignRef(newElement, self, Internal.node)
+		assignRef(self, Internal.node)
 	end
 
 	self:onUpdate(self.props, self.children)
