@@ -1,4 +1,4 @@
-# 2.6.3
+# 2.6.4
 * Fixed a couple component bugs
 
 # 2.6.3
